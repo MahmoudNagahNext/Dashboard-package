@@ -26,7 +26,7 @@ Route::prefix("dashboard")->group(function () {
         // Tickets routes
         Route::prefix("tickets")->group(function () {
             // Tickets resource
-            Route::apiResource('/', TicketController::class);
+            Route::apiResource('/', TicketController::class)->parameters('id');
 
             // Ticket Categories resource
             Route::apiResource('categories', TicketCategoriesController::class);
