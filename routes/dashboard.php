@@ -7,33 +7,32 @@ use nextdev\nextdashboard\Http\Controllers\DropDownsController;
 use nextdev\nextdashboard\Http\Controllers\TicketCategoriesController;
 use nextdev\nextdashboard\Http\Controllers\TicketController;
 
-Route::group(["prefix"=> "dashboard"], function () {
+Route::prefix("dashboard")->group(function () {
     
-    Route::group(['prefix' => 'auth', 'controller' => AuthController::class],function () {
+    // Auth routes
+    Route::prefix('auth')->controller(AuthController::class)->group(function () {
         Route::post('login', 'login');
-        // Route::post('register', 'register');
 
-        Route::post('/forgot-password', 'sendResetLinkEmail');
-        Route::post('/reset-password', 'reset');
+        // Route::post('register', 'register');
+        // Route::post('/forgot-password', 'sendResetLinkEmail');
+        // Route::post('/reset-password', 'reset');
     });
 
-    Route::group(['middleware' => 'auth:admin'], function () {
+    Route::middleware('auth:admin')->group( function () {
 
         // Admin management
         Route::apiResource('admins', AdminController::class);
 
-        // Ticket management
-        Route::apiResource('tickets', TicketController::class);
+        // Tickets routes
+        Route::prefix("tickets")->group(function () {
+            // Tickets resource
+            Route::apiResource('/', TicketController::class);
 
-        // Ticket category management
-        Route::apiResource('tickets/categories', TicketCategoriesController::class);
-
-        // Dropdown settings
-        Route::group(function () {
-            Route::get('tickets/statuses', [DropDownsController::class, 'ticketStatuies']);
-            Route::get('tickets/priorities', [DropDownsController::class, 'ticketPriorities']);
-        });
-
-    });
+            // Ticket Categories resource
+            Route::apiResource('categories', TicketCategoriesController::class);
     
+            Route::get('statuses', [DropDownsController::class, 'ticketStatuies']);
+            Route::get('priorities', [DropDownsController::class, 'ticketPriorities']);
+        });
+    });
 });
