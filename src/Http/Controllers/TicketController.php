@@ -20,7 +20,7 @@ class TicketController extends Controller
 
     public function index()
     {
-        $tickets = $this->ticketService->paginate(['creator','assignee','status','priority','category']);
+        $tickets = $this->ticketService->paginate(['creator','assignee','status','priority','category', 'media']);
         return $this->paginatedCollectionResponse($tickets,'Tickets Paginated', [], TicketResource::class);
     }
 
