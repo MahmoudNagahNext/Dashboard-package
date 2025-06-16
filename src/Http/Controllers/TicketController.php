@@ -43,7 +43,8 @@ class TicketController extends Controller
 
     public function show(int $id)
     {
-        return $this->successResponse(TicketResource::make($this->ticketService->find($id,['creator','assignee','status','priority','category'])));
+        $ticket = $this->ticketService->find($id,['creator','assignee','status','priority','category', 'media']);
+        return $this->successResponse(TicketResource::make($ticket));
     }
 
     public function update(TicketUpdateRequest $request,int $id)
