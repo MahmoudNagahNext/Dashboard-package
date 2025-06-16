@@ -1,0 +1,19 @@
+{
+    "name": "nextdev/nextdashboard",
+    "description": "Api for Dashbord",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "nextdev\\nextdashboard\\": "src/",
+            "Database\\": "database/"
+        }
+    },
+    "authors": [
+        {
+            "name": "MahmoudNagahNext",
+            "email": "m.nagah@nextecontech.ai"
+        }
+    ],
+    "require": {}
+}
