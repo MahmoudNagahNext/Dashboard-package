@@ -23,10 +23,19 @@ class TicketResource extends JsonResource
             'category' => $this->category->name ?? 'N/A',
             'created_by' => $this->creator->name ?? 'N/A',
             'assigned_to' => $this->assignee->name ?? 'N/A',
-            "attachments" => $this->media ?? [],
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
             'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
-
+            'attachments' => $this->getMedia('attachments')->map(function ($media) {
+                return [
+                    'id' => $media->id,
+                    'name' => $media->name,
+                    'file_name' => $media->file_name,
+                    'mime_type' => $media->mime_type,
+                    'url' => $media->getFullUrl(),
+                    'size' => $media->size,
+                    'created_at' => $media->created_at->format('Y-m-d H:i:s'),
+                ];
+            }),
         ];
     }
 }
