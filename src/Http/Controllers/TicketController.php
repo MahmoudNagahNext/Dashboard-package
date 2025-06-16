@@ -27,7 +27,13 @@ class TicketController extends Controller
     public function store(TicketStoreRequest $request)
     {
         try{
-            $dto = TicketDTO::fromRequest($request->validated());
+            $validated = $request->validated();
+            $data = array_merge(
+                $validated,
+                ['attachments' => $request->file('attachments')]
+            );
+
+            $dto = TicketDTO::fromRequest($data);
             $ticket = $this->ticketService->create($dto);
             return $this->createdResponse(TicketResource::make($ticket));
         } catch(\Exception $e){

@@ -14,6 +14,7 @@ class TicketDTO
         public readonly ?int $creator_id = null,
         public readonly ?string $assignee_type = null,
         public readonly ?int $assignee_id = null,
+        public readonly ?array $attachments = null,
     ) {}
 
     public static function fromRequest(array $data): self
@@ -28,6 +29,7 @@ class TicketDTO
             creator_id: $data['creator_id'] ?? null,
             assignee_type: $data['assignee_type'] ?? null,
             assignee_id: $data['assignee_id'] ?? null,
+            attachments: $data['attachments'] ?? null,
         );
     }
 }

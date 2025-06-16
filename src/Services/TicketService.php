@@ -22,10 +22,21 @@ class TicketService
     public function create(TicketDTO $dto)
     {   
         $data = (array) $dto;
+        $attachments = $data['attachments'] ?? null;
+        unset($data['attachments']);
+
         $data['creator_id'] = Auth::user()->id;
         $data['creator_type'] = Admin::class;
 
-        return $this->model::create($data);
+        $ticket = $this->model::create($data);
+
+        if ($attachments) {
+            foreach ($attachments as $attachment) {
+                $ticket->addMedia($attachment)->toMediaCollection('attachments');
+            }
+        }
+
+        return $ticket; 
     }
 
      public function find(int $id,array $with = [])
