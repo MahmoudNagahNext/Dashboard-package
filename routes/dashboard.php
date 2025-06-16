@@ -11,7 +11,7 @@ Route::group(["prefix"=> "dashboard"], function () {
     
     Route::group(['prefix' => 'auth', 'controller' => AuthController::class],function () {
         Route::post('login', 'login');
-        Route::post('register', 'register');
+        // Route::post('register', 'register');
 
         Route::post('/forgot-password', 'sendResetLinkEmail');
         Route::post('/reset-password', 'reset');
@@ -26,12 +26,12 @@ Route::group(["prefix"=> "dashboard"], function () {
         Route::apiResource('tickets', TicketController::class);
 
         // Ticket category management
-        Route::apiResource('ticket-categories', TicketCategoriesController::class);
+        Route::apiResource('tickets/categories', TicketCategoriesController::class);
 
         // Dropdown settings
-        Route::group(['prefix' => 'settings'], function () {
-            Route::get('ticket-status', [DropDownsController::class, 'ticketStatuies']);
-            Route::get('ticket-priorities', [DropDownsController::class, 'ticketPriorities']);
+        Route::group(function () {
+            Route::get('tickets/statuses', [DropDownsController::class, 'ticketStatuies']);
+            Route::get('tickets/priorities', [DropDownsController::class, 'ticketPriorities']);
         });
 
     });
