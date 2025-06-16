@@ -40,3 +40,21 @@ Add password reset configuration for admins
     'table' => 'password_reset_tokens',
     'expire' => 60,
 ],
+
+### 5. Spatie Media
+php artisan vendor:publish --provider="Spatie\MediaLibrary\MediaLibraryServiceProvider" --tag="migrations"
+php artisan vendor:publish --provider="Spatie\MediaLibrary\MediaLibraryServiceProvider" --tag="config"
+
+in config/filesystems.php
+'disks' => [
+    'public' => [
+        'driver' => 'local',
+        'root' => storage_path('app/public'),
+        'url' => env('APP_URL').'/storage',
+        'visibility' => 'public',
+    ],
+]
+
+run 
+php artisan storage:link
+
