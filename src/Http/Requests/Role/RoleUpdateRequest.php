@@ -31,7 +31,7 @@ class RoleUpdateRequest extends FormRequest
                  Rule::unique('roles')->ignore($this->route()->parameter('role')),
             ],
             'permissions' => 'nullable|array',
-            'permissions.*' => 'exists:permissions,name',
+            'permissions.*' => 'exists:permissions,id',
         ];
     }
 }
