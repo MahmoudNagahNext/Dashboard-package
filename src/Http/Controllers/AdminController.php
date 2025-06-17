@@ -64,7 +64,7 @@ class AdminController extends Controller
 
     public function assignRole(AssignRoleRequest $request, int $id)
     {
-        $admin = $this->adminService->AssignRole($request->validated(), $id);
+        $admin = $this->adminService->AssignRole($request->validated()['role_id'], $id);
 
         return $this->successResponse($admin);
     }
