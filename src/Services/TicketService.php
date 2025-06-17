@@ -34,7 +34,7 @@ class TicketService
 
             if ($attachments) {
                 foreach ($attachments as $attachment) {
-                    $ticket->addMedia($attachment)->toMediaCollection('attachments');
+                    $ticket->addMedia(storage_path("app/public/tickets/{$attachment}"))->toMediaCollection('attachments');
                 }
             }
 
