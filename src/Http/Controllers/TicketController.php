@@ -28,11 +28,8 @@ class TicketController extends Controller
     public function store(TicketStoreRequest $request)
     {
         try{
-            $validated = $request->validated();
-            $data = array_merge(
-                $validated,
-                ['attachments' => $request->file('attachments')]
-            );
+            $data = $request->validated();
+            $data['attachments'] = $request->file('attachments',[]);
 
             $dto = TicketDTO::fromRequest($data);
             $ticket = $this->ticketService->create($dto);
@@ -48,7 +45,7 @@ class TicketController extends Controller
         return $this->successResponse(TicketResource::make($ticket));
     }
 
-    public function update(Request $request,int $id)
+    public function update(TicketUpdateRequest $request,int $id)
     {
         try{            
             $data = $request->validated();
