@@ -25,7 +25,7 @@ class Ticket extends Model implements HasMedia
      public function registerMediaCollections(): void
     {
         $this->addMediaCollection('attachments')
-            ->useDisk('public') // تأكد إن ده نفس الـ disk اللي بتستخدمه في addMedia
+            ->useDisk('public')
             ->usePathCallback(function (Media $media) {
                 return 'tickets/' . $media->model->id;
             });
