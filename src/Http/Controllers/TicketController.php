@@ -53,11 +53,8 @@ class TicketController extends Controller
         try{
             dd($request->all());
             
-            $validated = $request->validated();
-            $data = array_merge(
-                $validated,
-                ['attachments' => $request->file('attachments')]
-            );
+            $data = $request->validated();
+            $data['attachments'] = $request->file('attachments',[]);
 
             $dto = TicketDTO::fromRequest($data);
             $this->ticketService->update($dto, $id);
