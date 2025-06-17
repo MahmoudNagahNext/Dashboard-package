@@ -59,3 +59,7 @@ in config/filesystems.php
 run 
 php artisan storage:link
 
+### 6. spatie permission
+php artisan vendor:publish --tag="permission-migrations"
+php artisan vendor:publish --tag="permission-config"
+php artisan migrate

@@ -1,0 +1,32 @@
+<?php
+
+namespace Database\seeders;
+
+use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+
+class PermissionSeeder extends Seeder
+{
+    public function run()
+    {
+        $models = [
+            'ticket' => ['create', 'view', 'update', 'delete'],
+            'admin'  => ['create', 'view', 'update', 'delete'],
+        ];
+
+        $permissions = [];
+
+        foreach ($models as $model => $actions) {
+            foreach ($actions as $action) {
+                $permName = "$model.$action";
+                Permission::firstOrCreate(['name' => $permName]);
+                $permissions[] = $permName;
+            }
+        }
+
+        // Assign to admin
+        $adminRole = Role::firstOrCreate(['name' => 'admin']);
+        $adminRole->syncPermissions($permissions);
+    }
+}
