@@ -51,32 +51,32 @@ class TicketService
     {
         $ticket = $this->model->find($id);
 
-    $data = [
-        'title' => $dto->title,
-        'description' => $dto->description,
-        'status_id' => $dto->status_id,
-        'priority_id' => $dto->priority_id,
-        'category_id' => $dto->category_id,
-        'creator_type' => $dto->creator_type,
-        'creator_id' => $dto->creator_id,
-        'assignee_type' => $dto->assignee_id ? Admin::class : null,
-        'assignee_id' => $dto->assignee_id,
-    ];
+        $data = [
+            'title' => $dto->title,
+            'description' => $dto->description,
+            'status_id' => $dto->status_id,
+            'priority_id' => $dto->priority_id,
+            'category_id' => $dto->category_id,
+            'creator_type' => $dto->creator_type,
+            'creator_id' => $dto->creator_id,
+            'assignee_type' => $dto->assignee_id ? Admin::class : null,
+            'assignee_id' => $dto->assignee_id,
+        ];
 
-    return DB::transaction(function() use($data, $dto, $ticket){
+        return DB::transaction(function() use($data, $dto, $ticket){
 
-        $ticket->update($data);
+            $ticket->update($data);
 
-        if (!empty($dto->attachments)) {
-            $ticket->clearMediaCollection('attachments');
+            if (!empty($dto->attachments)) {
+                $ticket->clearMediaCollection('attachments');
 
-            foreach ($dto->attachments as $file) {
-                $ticket->addMedia($file)->toMediaCollection('attachments');
+                foreach ($dto->attachments as $file) {
+                    $ticket->addMedia($file)->toMediaCollection('attachments');
+                }
             }
-        }
 
-        return $ticket;
-    });
+            return $ticket;
+        });
     }
  
     public function delete(int $id)

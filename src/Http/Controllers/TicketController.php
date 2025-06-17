@@ -57,6 +57,7 @@ class TicketController extends Controller
             );
 
             $dto = TicketDTO::fromRequest($data);
+            dd($dto);
             $this->ticketService->update($dto, $id);
             return $this->updatedResponse();
         } catch(\Exception $e){
