@@ -5,6 +5,7 @@ namespace nextdev\nextdashboard\Models;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Ticket extends Model implements HasMedia
 {
@@ -21,12 +22,14 @@ class Ticket extends Model implements HasMedia
         'assignee_id'
     ];
 
-    // public function registerMediaCollections(): void
-    // {
-    //     $this->addMediaCollection('attachments')
-    //         ->useDisk('public')
-    //         ->usePath('tickets');
-    // }
+     public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('attachments')
+            ->useDisk('public') // تأكد إن ده نفس الـ disk اللي بتستخدمه في addMedia
+            ->usePathCallback(function (Media $media) {
+                return 'tickets/' . $media->model->id;
+            });
+    }
 
 
     public function creator()      

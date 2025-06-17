@@ -27,7 +27,7 @@ Route::prefix("dashboard")->group(function () {
         Route::prefix("tickets")->group(function () {
             // Tickets resource
             Route::apiResource('', TicketController::class)->parameters(['' => 'ticket']);
-            // Route::post("/{ticket}", [TicketController::class, 'update']);
+            
             // Ticket Categories resource
             Route::apiResource('categories', TicketCategoriesController::class);
     
