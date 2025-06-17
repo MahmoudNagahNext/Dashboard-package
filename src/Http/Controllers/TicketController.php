@@ -2,6 +2,7 @@
 
 namespace nextdev\nextdashboard\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use nextdev\nextdashboard\DTOs\TicketDTO;
 use nextdev\nextdashboard\Traits\ApiResponseTrait;
@@ -47,7 +48,7 @@ class TicketController extends Controller
         return $this->successResponse(TicketResource::make($ticket));
     }
 
-    public function update(TicketUpdateRequest $request,int $id)
+    public function update(Request $request,int $id)
     {
         try{
             dd($request->all());
@@ -60,7 +61,7 @@ class TicketController extends Controller
 
             $dto = TicketDTO::fromRequest($data);
             $this->ticketService->update($dto, $id);
-            
+
             return $this->updatedResponse();
         } catch(\Exception $e){
             return $this->handleException($e);
