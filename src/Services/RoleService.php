@@ -24,7 +24,8 @@ class RoleService
             $role = $this->model::query()->create(['name' => $data['name']]);
 
             if (!empty($data['permissions'])) {
-                $role->syncPermissions($data['permissions']);
+                $role->permissions()->sync($data['permissions']);
+                // $role->syncPermissions($data['permissions']);
             }
 
             return $role->load('permissions');
