@@ -50,6 +50,7 @@ class TicketController extends Controller
     public function update(TicketUpdateRequest $request,int $id)
     {
         try{
+            dd($request->all());
             $validated = $request->validated();
             $data = array_merge(
                 $validated,
