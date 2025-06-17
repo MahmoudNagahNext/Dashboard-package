@@ -55,7 +55,7 @@ class TicketController extends Controller
                 $validated,
                 ['attachments' => $request->file('attachments')]
             );
-            dd(123);
+            dd($data);
 
             $dto = TicketDTO::fromRequest($data);
             dd($dto);
