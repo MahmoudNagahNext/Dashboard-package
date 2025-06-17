@@ -19,6 +19,6 @@ class PermissionController extends Controller
     public function index()
     {
         $permissions = $this->service->groupedPermissions();
-        return $this->paginatedResponse($permissions, "Permissions Pagination");
+        return $this->successResponse($permissions, "Permissions Pagination");
     }
 }
