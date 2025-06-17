@@ -53,6 +53,7 @@ class RoleController extends Controller
     {
         try{
             $this->service->delete($id);
+            return $this->deletedResponse("Role Deleted Successfully");
         } catch (\Exception $e) {
             return $this->handleException($e);
         }
