@@ -5,6 +5,7 @@ use Exception;
 use Illuminate\Routing\Controller;
 use nextdev\nextdashboard\Http\Requests\Role\RoleStoreRequest;
 use nextdev\nextdashboard\Http\Requests\Role\RoleUpdateRequest;
+use nextdev\nextdashboard\Http\Resources\RoleResource;
 use nextdev\nextdashboard\Services\RoleService;
 use nextdev\nextdashboard\Traits\ApiResponseTrait;
 
@@ -19,14 +20,19 @@ class RoleController extends Controller
     
      public function index()
     {
-        return $this->successResponse($this->service->index());
+        return $this->successResponse(
+            RoleResource::collection($this->service->index())
+        );
     }
 
     public function store(RoleStoreRequest $request)
     {
         try{
             $role = $this->service->store($request->validated());
-            return $this->createdResponse($role);
+
+            return $this->createdResponse(
+                RoleResource::make($role)
+            );
         } catch(\Exception $e) {
             return $this->handleException($e);
         }
@@ -35,7 +41,7 @@ class RoleController extends Controller
     public function show(int $id)
     {
         return $this->successResponse(
-            $this->service->find($id)
+            RoleResource::make($this->service->find($id))
         );
     }
 
