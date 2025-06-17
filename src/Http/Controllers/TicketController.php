@@ -50,7 +50,14 @@ class TicketController extends Controller
     public function update(TicketUpdateRequest $request,int $id)
     {
         try{
-            $this->ticketService->update($request->validated(), $id);
+            $validated = $request->validated();
+            $data = array_merge(
+                $validated,
+                ['attachments' => $request->file('attachments')]
+            );
+
+            $dto = TicketDTO::fromRequest($data);
+            $this->ticketService->update($dto, $id);
             return $this->updatedResponse();
         } catch(\Exception $e){
             return $this->handleException($e);

@@ -31,6 +31,8 @@ class TicketUpdateRequest extends FormRequest
             "status_id"     => "sometimes|integer|exists:ticket_statuses,id",
             "category_id"   => "sometimes|integer|exists:ticket_categories,id",
             "assignee_id"   => "sometimes|integer|exists:admins,id",
+            'attachments'   => 'sometimes|array',
+            'attachments.*' => 'file|mimes:jpg,jpeg,png,pdf,docx|max:5120',
         ];
     }
 }
