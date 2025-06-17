@@ -7,6 +7,7 @@ use nextdev\nextdashboard\DTOs\AdminDTO;
 use nextdev\nextdashboard\Traits\ApiResponseTrait;
 use nextdev\nextdashboard\Http\Requests\Admin\AdminStoreRequest;
 use nextdev\nextdashboard\Http\Requests\Admin\AdminUpdateRequest;
+use nextdev\nextdashboard\Http\Requests\Admin\AssignRoleRequest;
 use nextdev\nextdashboard\Http\Requests\Auth\RegisterRequest;
 use nextdev\nextdashboard\Http\Resources\AdminResource;
 use nextdev\nextdashboard\Services\AdminService;
@@ -59,5 +60,12 @@ class AdminController extends Controller
         } catch(\Exception $e){
             return $this->handleException($e);
         }
+    }
+
+    public function assignRole(AssignRoleRequest $request, int $id)
+    {
+        $admin = $this->adminService->AssignRole($request->validated(), $id);
+
+        return $this->successResponse($admin);
     }
 }

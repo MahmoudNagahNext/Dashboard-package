@@ -25,6 +25,7 @@ Route::prefix("dashboard")->group(function () {
 
         // Admin management
         Route::apiResource('admins', AdminController::class);
+        Route::post("/admins/{admin}/assign-role", [AdminController::class, 'assignRole']);
 
         // Tickets routes
         Route::prefix("tickets")->group(function () {

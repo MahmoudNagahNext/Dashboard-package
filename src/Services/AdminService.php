@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use nextdev\nextdashboard\DTOs\AdminDTO;
 use nextdev\nextdashboard\Models\Admin;
+use Spatie\Permission\Models\Role;
 
 class AdminService
 {
@@ -43,5 +44,15 @@ class AdminService
     {
         $user = $this->model::query()->find($id);
         return $user->delete();
+    }
+
+    public function AssignRole(int $roleId, int $adminId)
+    {
+        $admin = $this->model::findOrFail($adminId);
+        $role = Role::findOrFail($roleId);
+
+        $admin->syncRoles([$role->name]);
+
+        return $admin->load('roles');
     }
 }
