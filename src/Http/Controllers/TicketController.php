@@ -49,13 +49,13 @@ class TicketController extends Controller
 
     public function update(TicketUpdateRequest $request,int $id)
     {
-        dd(123);
         try{
             $validated = $request->validated();
             $data = array_merge(
                 $validated,
                 ['attachments' => $request->file('attachments')]
             );
+            dd(123);
 
             $dto = TicketDTO::fromRequest($data);
             dd($dto);
