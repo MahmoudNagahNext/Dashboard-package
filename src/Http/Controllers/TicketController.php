@@ -50,9 +50,7 @@ class TicketController extends Controller
 
     public function update(Request $request,int $id)
     {
-        try{
-            dd($request->all());
-            
+        try{            
             $data = $request->validated();
             $data['attachments'] = $request->file('attachments',[]);
 
