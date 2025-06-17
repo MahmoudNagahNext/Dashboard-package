@@ -30,8 +30,8 @@ class TicketStoreRequest extends FormRequest
             "priority_id"   => "nullable|integer|exists:ticket_priorities,id",
             "status_id"     => "nullable|integer|exists:ticket_statuses,id",
             "category_id"   => "nullable|integer|exists:ticket_categories,id",
-            'attachments' => ['nullable', 'array'],
-            'attachments.*' => ['file', 'mimes:jpg,jpeg,png,pdf,docx', 'max:5120'],
+            'attachments'   => 'nullable|array',
+            'attachments.*' => 'file|mimes:jpg,jpeg,png,pdf,docx|max:5120',
         ];
     }
 }
