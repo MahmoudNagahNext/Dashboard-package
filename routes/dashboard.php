@@ -5,6 +5,8 @@ use nextdev\nextdashboard\Http\Controllers\AdminController;
 use nextdev\nextdashboard\Http\Controllers\AuthController;
 use nextdev\nextdashboard\Http\Controllers\DropDownsController;
 use nextdev\nextdashboard\Http\Controllers\PermissionController;
+use nextdev\nextdashboard\Http\Controllers\RoleController;
+use nextdev\nextdashboard\Http\Controllers\RolesController;
 use nextdev\nextdashboard\Http\Controllers\TicketCategoriesController;
 use nextdev\nextdashboard\Http\Controllers\TicketController;
 
@@ -37,6 +39,7 @@ Route::prefix("dashboard")->group(function () {
         });
 
         // Roles & Permissions 
+        Route::apiResource('/roles',RoleController::class);
         Route::GET("/permissions", [PermissionController::class, "index"]);
     });
 });
