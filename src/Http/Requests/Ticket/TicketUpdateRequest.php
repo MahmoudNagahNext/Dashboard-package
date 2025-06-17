@@ -25,14 +25,14 @@ class TicketUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "title"         => "required|string|min:3|max:255",
-            "description"   => "required|string",
-            "priority_id"   => "nullable|integer|exists:ticket_priorities,id",
-            "status_id"     => "nullable|integer|exists:ticket_statuses,id",
-            "category_id"   => "nullable|integer|exists:ticket_categories,id",
-            "assignee_id"   => "nullable|integer|exists:admins,id",
-            'attachments'   => 'nullable|array',
-            'attachments.*' => 'file|mimes:jpg,jpeg,png,pdf,docx|max:5120',
+            // "title"         => "required|string|min:3|max:255",
+            // "description"   => "required|string",
+            // "priority_id"   => "nullable|integer|exists:ticket_priorities,id",
+            // "status_id"     => "nullable|integer|exists:ticket_statuses,id",
+            // "category_id"   => "nullable|integer|exists:ticket_categories,id",
+            // "assignee_id"   => "nullable|integer|exists:admins,id",
+            // 'attachments'   => 'nullable|array',
+            // 'attachments.*' => 'file|mimes:jpg,jpeg,png,pdf,docx|max:5120',
         ];
     }
 }

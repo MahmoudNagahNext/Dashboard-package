@@ -51,16 +51,16 @@ class TicketController extends Controller
     {
         try{
             dd($request->all());
+            
             $validated = $request->validated();
             $data = array_merge(
                 $validated,
                 ['attachments' => $request->file('attachments')]
             );
-            dd($data);
 
             $dto = TicketDTO::fromRequest($data);
-            dd($dto);
             $this->ticketService->update($dto, $id);
+            
             return $this->updatedResponse();
         } catch(\Exception $e){
             return $this->handleException($e);
