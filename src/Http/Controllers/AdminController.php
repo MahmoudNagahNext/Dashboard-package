@@ -22,13 +22,21 @@ class AdminController extends Controller
 
     public function index()
     {
-        $admins = $this->adminService->paginate();
-        return $this->paginatedCollectionResponse($admins,'Admins Paginated', [], AdminResource::class);
+        try{
+            $this->authorize('admin.view');
+
+            $admins = $this->adminService->paginate();
+            return $this->paginatedCollectionResponse($admins,'Admins Paginated', [], AdminResource::class);    
+        } catch (\Exception $e) {
+             return $this->handleException($e);
+        }
     }
 
     public function store(AdminStoreRequest $request)
     {
         try{
+            $this->authorize('admin.create');
+
             $dto = AdminDTO::fromRequest($request->validated());
             $admin = $this->adminService->create($dto);
             return $this->createdResponse(AdminResource::make($admin));
@@ -39,12 +47,20 @@ class AdminController extends Controller
 
     public function show(int $id)
     {
-        return $this->successResponse(AdminResource::make($this->adminService->find($id)));
+        try{
+            $this->authorize('admin.view');
+
+            return $this->successResponse(AdminResource::make($this->adminService->find($id)));
+        } catch (\Exception $e){
+             return $this->handleException($e);
+        }
     }
 
     public function update(AdminUpdateRequest $request,int $id)
     {
         try{
+            $this->authorize('admin.update');
+
             $this->adminService->update($request->validated(), $id);
             return $this->updatedResponse();
         } catch(\Exception $e){
@@ -55,6 +71,8 @@ class AdminController extends Controller
     public function destroy(int $id)
     {
         try{
+            $this->authorize('admin.delete');
+
             $this->adminService->delete($id);
             return $this->deletedResponse();
         } catch(\Exception $e){
@@ -64,8 +82,13 @@ class AdminController extends Controller
 
     public function assignRole(AssignRoleRequest $request, int $id)
     {
-        $admin = $this->adminService->AssignRole($request->validated()['role_id'], $id);
+        try{
+            $this->authorize('admin.assign_role');
 
-        return $this->successResponse($admin);
+            $admin = $this->adminService->AssignRole($request->validated()['role_id'], $id);
+            return $this->successResponse($admin);
+        } catch (\Exception $e) {
+            return $this->handleException($e);   
+        }
     }
 }
