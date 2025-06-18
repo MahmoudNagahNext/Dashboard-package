@@ -10,10 +10,12 @@ use nextdev\nextdashboard\Http\Requests\Ticket\TicketStoreRequest;
 use nextdev\nextdashboard\Http\Requests\Ticket\TicketUpdateRequest;
 use nextdev\nextdashboard\Http\Resources\TicketResource;
 use nextdev\nextdashboard\Services\TicketService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
 
 class TicketController extends Controller
 {
-    use ApiResponseTrait;
+    use ApiResponseTrait, AuthorizesRequests;
 
     public function __construct(
         protected TicketService $ticketService
@@ -71,7 +73,7 @@ class TicketController extends Controller
     public function destroy(int $id)
     {
         $this->authorize('ticket.delete');
-        
+
         try{
             $this->ticketService->delete($id);
             return $this->deletedResponse();
