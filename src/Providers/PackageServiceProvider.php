@@ -3,11 +3,16 @@
 namespace nextdev\nextdashboard\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use nextdev\nextdashboard\MediaLibrary\PathGenerators\TicketPathGenerator;
+use Spatie\MediaLibrary\Support\PathGenerator\PathGenerator;
 
 class PackageServiceProvider extends ServiceProvider
 {
     public function boot()
     {
+
+        app()->bind(PathGenerator::class, TicketPathGenerator::class);
+
         // Load routes
         $this->loadRoutesFrom(__DIR__.'/../../routes/dashboard.php');
 
