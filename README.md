@@ -63,3 +63,17 @@ php artisan storage:link
 php artisan vendor:publish --tag="permission-migrations"
 php artisan vendor:publish --tag="permission-config"
 php artisan migrate
+
+
+
+
+## 📢 Available Events
+
+The following events are dispatched by the `nextdashboard` package:
+
+| Event Name               | Description                                          |
+|--------------------------|------------------------------------------------------|
+| `AdminCreated`           | Dispatched when a new admin is created.              |
+| `RoleAssignedToAdmin`    | Dispatched when a role is assigned to an admin.      |
+| `TicketCreated`          | Dispatched when a new ticket is created.             |
+| `TicketAssigned`         | Dispatched when a ticket is assigned to an admin.    |
