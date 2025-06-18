@@ -10,12 +10,12 @@ use nextdev\nextdashboard\Http\Requests\Ticket\TicketStoreRequest;
 use nextdev\nextdashboard\Http\Requests\Ticket\TicketUpdateRequest;
 use nextdev\nextdashboard\Http\Resources\TicketResource;
 use nextdev\nextdashboard\Services\TicketService;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+// use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 
 class TicketController extends Controller
 {
-    use ApiResponseTrait, AuthorizesRequests;
+    use ApiResponseTrait;
 
     public function __construct(
         protected TicketService $ticketService
