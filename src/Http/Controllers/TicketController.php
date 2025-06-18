@@ -23,10 +23,14 @@ class TicketController extends Controller
 
     public function index()
     {
-        $this->authorize('ticket.view');
+        try{
+            $this->authorize('ticket.view');
 
-        $tickets = $this->ticketService->paginate(['creator','assignee','status','priority','category', 'media']);
-        return $this->paginatedCollectionResponse($tickets,'Tickets Paginated', [], TicketResource::class);
+            $tickets = $this->ticketService->paginate(['creator','assignee','status','priority','category', 'media']);
+            return $this->paginatedCollectionResponse($tickets,'Tickets Paginated', [], TicketResource::class);
+        } catch (\Exception $e){
+            return $this->handleException($e);
+        }
     }
 
     public function store(TicketStoreRequest $request)
@@ -47,17 +51,21 @@ class TicketController extends Controller
 
     public function show(int $id)
     {
-        $this->authorize('ticket.view');
+        try{
+            $this->authorize('ticket.view');
 
-        $ticket = $this->ticketService->find($id,['creator','assignee','status','priority','category', 'media']);
-        return $this->successResponse(TicketResource::make($ticket));
+            $ticket = $this->ticketService->find($id,['creator','assignee','status','priority','category', 'media']);
+            return $this->successResponse(TicketResource::make($ticket));
+        } catch (\Exception $e) {
+            return $this->handleException($e);
+        }
     }
 
     public function update(TicketUpdateRequest $request,int $id)
     {
-        $this->authorize('ticket.update'); 
-
         try{            
+            $this->authorize('ticket.update');
+
             $data = $request->validated();
             $data['attachments'] = $request->file('attachments',[]);
 
@@ -72,9 +80,9 @@ class TicketController extends Controller
 
     public function destroy(int $id)
     {
-        $this->authorize('ticket.delete');
-
         try{
+            $this->authorize('ticket.delete');
+     
             $this->ticketService->delete($id);
             return $this->deletedResponse();
         } catch(\Exception $e){
