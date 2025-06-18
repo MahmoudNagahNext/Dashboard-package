@@ -69,6 +69,9 @@ php artisan migrate
 
 ## 📢 Available Events
 
+you can list all events using this command
+-- php artisan nextdashboard:list-events
+
 The following events are dispatched by the `nextdashboard` package:
 
 | Event Name               | Description                                          |
