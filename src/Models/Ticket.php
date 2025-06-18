@@ -3,6 +3,7 @@
 namespace nextdev\nextdashboard\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use nextdev\nextdashboard\MediaLibrary\PathGenerators\TicketPathGenerator;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -22,14 +23,12 @@ class Ticket extends Model implements HasMedia
         'assignee_id'
     ];
 
-    //  public function registerMediaCollections(): void
-    // {
-    //     $this->addMediaCollection('attachments')
-    //         ->useDisk('public')
-    //         ->usePathCallback(function (Media $media) {
-    //             return 'tickets/' . $media->model->id;
-    //         });
-    // }
+     public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('attachments')
+            ->useDisk('public')
+            ->usePathGenerator(new TicketPathGenerator());
+    }
 
 
     public function creator()      

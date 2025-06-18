@@ -12,7 +12,8 @@ class PermissionSeeder extends Seeder
     {
         $models = [
             'ticket' => ['create', 'view', 'update', 'delete'],
-            'admin'  => ['create', 'view', 'update', 'delete'],
+            'admin'  => ['create', 'view', 'update', 'delete','assign_role'],
+            'role'   => ['create', 'view', 'update', 'delete']
         ];
 
         $permissions = [];
