@@ -31,9 +31,9 @@ class TicketController extends Controller
 
     public function store(TicketStoreRequest $request)
     {
-        $this->authorize('ticket.create');
-
         try{
+            $this->authorize('ticket.create');
+
             $data = $request->validated();
             $data['attachments'] = $request->file('attachments',[]);
 
