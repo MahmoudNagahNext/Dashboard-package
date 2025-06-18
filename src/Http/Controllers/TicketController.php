@@ -11,7 +11,7 @@ use nextdev\nextdashboard\Http\Requests\Ticket\TicketUpdateRequest;
 use nextdev\nextdashboard\Http\Resources\TicketResource;
 use nextdev\nextdashboard\Services\TicketService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-
+use nextdev\nextdashboard\Events\TicketCreated;
 
 class TicketController extends Controller
 {
@@ -43,6 +43,8 @@ class TicketController extends Controller
 
             $dto = TicketDTO::fromRequest($data);
             $ticket = $this->ticketService->create($dto);
+
+            event(new TicketCreated($ticket));
             return $this->createdResponse(TicketResource::make($ticket));
         } catch(\Exception $e){
             return $this->handleException($e);
@@ -71,7 +73,8 @@ class TicketController extends Controller
 
             $dto = TicketDTO::fromRequest($data);
             $this->ticketService->update($dto, $id);
-
+            
+            // event(new TicketAssigned($ticket, $assignedAdmin));
             return $this->updatedResponse();
         } catch(\Exception $e){
             return $this->handleException($e);

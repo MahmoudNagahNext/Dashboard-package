@@ -4,6 +4,8 @@ namespace nextdev\nextdashboard\Http\Controllers;
 
 use Illuminate\Routing\Controller;
 use nextdev\nextdashboard\DTOs\AdminDTO;
+use nextdev\nextdashboard\Events\AdminCreated;
+use nextdev\nextdashboard\Events\RoleAssignedToAdmin;
 use nextdev\nextdashboard\Traits\ApiResponseTrait;
 use nextdev\nextdashboard\Http\Requests\Admin\AdminStoreRequest;
 use nextdev\nextdashboard\Http\Requests\Admin\AdminUpdateRequest;
@@ -39,6 +41,9 @@ class AdminController extends Controller
 
             $dto = AdminDTO::fromRequest($request->validated());
             $admin = $this->adminService->create($dto);
+
+            event(new AdminCreated($admin));
+
             return $this->createdResponse(AdminResource::make($admin));
         } catch(\Exception $e){
             return $this->handleException($e);
@@ -86,6 +91,8 @@ class AdminController extends Controller
             $this->authorize('admin.assign_role');
 
             $admin = $this->adminService->AssignRole($request->validated()['role_id'], $id);
+
+            // event(new RoleAssignedToAdmin($admin, $role));
             return $this->successResponse($admin);
         } catch (\Exception $e) {
             return $this->handleException($e);   
