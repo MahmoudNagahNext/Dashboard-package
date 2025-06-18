@@ -23,12 +23,12 @@ class Ticket extends Model implements HasMedia
         'assignee_id'
     ];
 
-     public function registerMediaCollections(): void
-    {
-        $this->addMediaCollection('attachments')
-            ->useDisk('public')
-            ->usePathGenerator(new TicketPathGenerator());
-    }
+    //  public function registerMediaCollections(): void
+    // {
+    //     $this->addMediaCollection('attachments')
+    //         ->useDisk('public')
+    //         ->usePathGenerator(new TicketPathGenerator());
+    // }
 
 
     public function creator()      

@@ -11,7 +11,7 @@ class PackageServiceProvider extends ServiceProvider
     public function boot()
     {
 
-        app()->bind(PathGenerator::class, TicketPathGenerator::class);
+        // app()->bind(PathGenerator::class, TicketPathGenerator::class);
 
         // Load routes
         $this->loadRoutesFrom(__DIR__.'/../../routes/dashboard.php');
