@@ -49,6 +49,7 @@ class RoleController extends Controller
     {
         try{
             $role = $this->service->update($id, $request->validated());
+            dd($role);
             return $this->updatedResponse([], "Role Updated Successfully");
         } catch (\Exception $e) {
             return $this->handleException($e);

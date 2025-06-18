@@ -21,12 +21,16 @@ class TicketController extends Controller
 
     public function index()
     {
+        $this->authorize('ticket.view');
+
         $tickets = $this->ticketService->paginate(['creator','assignee','status','priority','category', 'media']);
         return $this->paginatedCollectionResponse($tickets,'Tickets Paginated', [], TicketResource::class);
     }
 
     public function store(TicketStoreRequest $request)
     {
+        $this->authorize('ticket.create');
+
         try{
             $data = $request->validated();
             $data['attachments'] = $request->file('attachments',[]);
@@ -41,12 +45,16 @@ class TicketController extends Controller
 
     public function show(int $id)
     {
+        $this->authorize('ticket.view');
+
         $ticket = $this->ticketService->find($id,['creator','assignee','status','priority','category', 'media']);
         return $this->successResponse(TicketResource::make($ticket));
     }
 
     public function update(TicketUpdateRequest $request,int $id)
     {
+        $this->authorize('ticket.update'); 
+
         try{            
             $data = $request->validated();
             $data['attachments'] = $request->file('attachments',[]);
@@ -62,6 +70,8 @@ class TicketController extends Controller
 
     public function destroy(int $id)
     {
+        $this->authorize('ticket.delete');
+        
         try{
             $this->ticketService->delete($id);
             return $this->deletedResponse();
