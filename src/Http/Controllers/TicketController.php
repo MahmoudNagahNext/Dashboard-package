@@ -10,12 +10,12 @@ use nextdev\nextdashboard\Http\Requests\Ticket\TicketStoreRequest;
 use nextdev\nextdashboard\Http\Requests\Ticket\TicketUpdateRequest;
 use nextdev\nextdashboard\Http\Resources\TicketResource;
 use nextdev\nextdashboard\Services\TicketService;
-// use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 
 class TicketController extends Controller
 {
-    use ApiResponseTrait;
+    use ApiResponseTrait, AuthorizesRequests;
 
     public function __construct(
         protected TicketService $ticketService
@@ -24,7 +24,7 @@ class TicketController extends Controller
     public function index()
     {
         try{
-            // $this->authorize('ticket.view');
+            $this->authorize('ticket.view');
 
             $tickets = $this->ticketService->paginate(['creator','assignee','status','priority','category', 'media']);
             return $this->paginatedCollectionResponse($tickets,'Tickets Paginated', [], TicketResource::class);
