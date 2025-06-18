@@ -52,7 +52,7 @@ class TicketController extends Controller
     public function show(int $id)
     {
         try{
-            $this->authorize('ticket.view');
+            // $this->authorize('ticket.view');
 
             $ticket = $this->ticketService->find($id,['creator','assignee','status','priority','category', 'media']);
             return $this->successResponse(TicketResource::make($ticket));
