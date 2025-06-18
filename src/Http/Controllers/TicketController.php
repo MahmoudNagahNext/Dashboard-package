@@ -53,7 +53,7 @@ class TicketController extends Controller
     {
         try{
             // $this->authorize('ticket.view');
-            auth()->user()->can('ticket.view')
+            auth()->user()->can('ticket.view');
 
             $ticket = $this->ticketService->find($id,['creator','assignee','status','priority','category', 'media']);
             return $this->successResponse(TicketResource::make($ticket));
