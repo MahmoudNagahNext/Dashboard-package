@@ -99,7 +99,7 @@ class TicketController extends Controller
     {
         try{
             // $this->authorize('ticket.delete');
-            $this->ticketService->bulkDelete($request->validated());
+            $this->ticketService->bulkDelete($request->validated()['ids']);
             return $this->deletedResponse('Tickets deleted successfully');
         } catch(\Exception $e){
             return $this->handleException($e);
