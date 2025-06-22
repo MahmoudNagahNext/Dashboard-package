@@ -30,15 +30,18 @@ Route::prefix("dashboard")->group(function () {
 
         // Tickets routes
         Route::prefix("tickets")->group(function () {
-            // Tickets resource
-            Route::apiResource('', TicketController::class)->parameters(['' => 'ticket']);
-            Route::post("/bulk-delete", [TicketController::class, 'bulkDelete']);
+           
             // Ticket Categories resource
             Route::apiResource('categories', TicketCategoriesController::class);
             Route::post("/categories/bulk-delete", [TicketCategoriesController::class, 'bulkDelete']);
     
             Route::get('statuses', [DropDownsController::class, 'ticketStatuies']);
             Route::get('priorities', [DropDownsController::class, 'ticketPriorities']);
+        
+             // Tickets resource
+             Route::apiResource('', TicketController::class)->parameters(['' => 'ticket']);
+             Route::post("/bulk-delete", [TicketController::class, 'bulkDelete']);
+        
         });
 
         // Roles & Permissions 
