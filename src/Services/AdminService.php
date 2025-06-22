@@ -2,9 +2,8 @@
 
 namespace nextdev\nextdashboard\Services;
 
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use nextdev\nextdashboard\DTOs\AdminDTO;
 use nextdev\nextdashboard\Models\Admin;
 use Spatie\Permission\Models\Role;
@@ -22,11 +21,17 @@ class AdminService
  
     public function create(AdminDTO $dto)
     { 
-        return $this->model::create([
-            'name'=> $dto->name,
-            'email'=> $dto->email,
-            'password'=> Hash::make($dto->password),
-        ]);
+        return DB::transaction(function() use ($dto){
+            $admin = $this->model::create([
+                'name'=> $dto->name,
+                'email'=> $dto->email,
+                'password'=> Hash::make($dto->password),
+            ]);
+
+            activity()->log('Create Admin');
+
+            return $admin;
+        });
     }
 
     public function find(int $id)
@@ -36,14 +41,24 @@ class AdminService
  
     public function update(array $data, $id)
     {
-        $user = $this->model::query()->find($id);
-        return $user->update($data);
+        DB::transaction(function() use ($data, $id){
+            $user = $this->model::query()->find($id);
+            $user->update($data);
+
+            activity()->log('Update Admin');
+            
+            return $user;
+        });
     }
  
     public function delete(int $id)
     {
-        $user = $this->model::query()->find($id);
-        return $user->delete();
+        DB::transaction(function() use ($id){
+            $user = $this->model::query()->find($id);
+            $user->delete();
+            activity()->log('Delete Admin');
+            return true;
+        });
     }
 
     public function AssignRole(int $roleId, int $adminId)
