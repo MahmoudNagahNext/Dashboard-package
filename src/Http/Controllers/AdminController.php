@@ -5,13 +5,11 @@ namespace nextdev\nextdashboard\Http\Controllers;
 use Illuminate\Routing\Controller;
 use nextdev\nextdashboard\DTOs\AdminDTO;
 use nextdev\nextdashboard\Events\AdminCreated;
-use nextdev\nextdashboard\Events\RoleAssignedToAdmin;
 use nextdev\nextdashboard\Traits\ApiResponseTrait;
 use nextdev\nextdashboard\Http\Requests\Admin\AdminStoreRequest;
 use nextdev\nextdashboard\Http\Requests\Admin\AdminUpdateRequest;
 use nextdev\nextdashboard\Http\Requests\Admin\AssignRoleRequest;
 use nextdev\nextdashboard\Http\Requests\Admin\BulkDeleteRequest;
-use nextdev\nextdashboard\Http\Requests\Auth\RegisterRequest;
 use nextdev\nextdashboard\Http\Resources\AdminResource;
 use nextdev\nextdashboard\Services\AdminService;
 
@@ -26,7 +24,7 @@ class AdminController extends Controller
     public function index()
     {
         try{
-            $this->authorize('admin.view');
+            // $this->authorize('admin.view');
 
             $admins = $this->adminService->paginate();
             return $this->paginatedCollectionResponse($admins,'Admins Paginated', [], AdminResource::class);    
