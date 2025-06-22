@@ -36,7 +36,7 @@ class AdminController extends Controller
     public function store(AdminStoreRequest $request)
     {
         try{
-            $this->authorize('admin.create');
+            // $this->authorize('admin.create');
 
             $dto = AdminDTO::fromRequest($request->validated());
             $admin = $this->adminService->create($dto);
@@ -52,7 +52,7 @@ class AdminController extends Controller
     public function show(int $id)
     {
         try{
-            $this->authorize('admin.view');
+            // $this->authorize('admin.view');
 
             return $this->successResponse(AdminResource::make($this->adminService->find($id)));
         } catch (\Exception $e){
@@ -63,7 +63,7 @@ class AdminController extends Controller
     public function update(AdminUpdateRequest $request,int $id)
     {
         try{
-            $this->authorize('admin.update');
+            // $this->authorize('admin.update');
 
             $this->adminService->update($request->validated(), $id);
             return $this->updatedResponse();
@@ -75,7 +75,7 @@ class AdminController extends Controller
     public function destroy(int $id)
     {
         try{
-            $this->authorize('admin.delete');
+            // $this->authorize('admin.delete');
 
             $this->adminService->delete($id);
             return $this->deletedResponse();
@@ -87,7 +87,7 @@ class AdminController extends Controller
     public function assignRole(AssignRoleRequest $request, int $id)
     {
         try{
-            $this->authorize('admin.assign_role');
+            // $this->authorize('admin.assign_role');
 
             $admin = $this->adminService->AssignRole($request->validated()['role_id'], $id);
 
