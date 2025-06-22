@@ -3,15 +3,10 @@
 namespace nextdev\nextdashboard\Http\Controllers;
 
 use Illuminate\Routing\Controller;
-use nextdev\nextdashboard\DTOs\AdminDTO;
 use nextdev\nextdashboard\Traits\ApiResponseTrait;
-use nextdev\nextdashboard\Http\Requests\Admin\AdminStoreRequest;
-use nextdev\nextdashboard\Http\Requests\Admin\AdminUpdateRequest;
+use nextdev\nextdashboard\Http\Requests\TicketCategory\BulkDeleteRequest;
 use nextdev\nextdashboard\Http\Requests\TicketCategory\TicketCategoryStoreRequest;
-use nextdev\nextdashboard\Http\Requests\Auth\RegisterRequest;
 use nextdev\nextdashboard\Http\Requests\TicketCategory\TicketCategoryUpdateRequest;
-use nextdev\nextdashboard\Http\Resources\AdminResource;
-use nextdev\nextdashboard\Services\AdminService;
 use nextdev\nextdashboard\Services\TicketCategoriesService;
 
 class TicketCategoriesController extends Controller
@@ -62,4 +57,17 @@ class TicketCategoriesController extends Controller
             return $this->handleException($e);
         }
     }
+
+    public function bulkDelete(BulkDeleteRequest $request)
+    {
+        try{
+            // $this->authorize('ticket.delete');
+
+            $this->service->bulkDelete($request->validated());
+            return $this->deletedResponse();
+        } catch(\Exception $e){
+            return $this->handleException($e);
+        }
+    }
+
 }

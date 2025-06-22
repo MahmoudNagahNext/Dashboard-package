@@ -12,6 +12,8 @@ use nextdev\nextdashboard\Http\Resources\TicketResource;
 use nextdev\nextdashboard\Services\TicketService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use nextdev\nextdashboard\Events\TicketCreated;
+use nextdev\nextdashboard\Http\Requests\Ticket\BulkDeleteRequest;
+
 
 class TicketController extends Controller
 {
@@ -87,6 +89,17 @@ class TicketController extends Controller
             $this->authorize('ticket.delete');
      
             $this->ticketService->delete($id);
+            return $this->deletedResponse();
+        } catch(\Exception $e){
+            return $this->handleException($e);
+        }
+    }
+
+    public function bulkDelete(BulkDeleteRequest $request)
+    {
+        try{
+            $this->authorize('ticket.delete');
+            $this->ticketService->bulkDelete($request->validated());
             return $this->deletedResponse();
         } catch(\Exception $e){
             return $this->handleException($e);

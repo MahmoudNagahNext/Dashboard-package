@@ -58,6 +58,7 @@ class AuthController extends Controller
         }
     }
 
+    // TODO:: use OPT
     public function sendResetLinkEmail(SendResetLinkEmailRequest $request)
     {
         $admin = Admin::where('email', $request->email)->first();

@@ -36,4 +36,9 @@ class TicketCategoriesService
         $item = $this->model::query()->find($id);
         return $item->delete();
     }
+
+    public function bulkDelete(array $data)
+    {
+        return $this->model::query()->whereIn('id', $data['ids'])->delete();
+    }
 }

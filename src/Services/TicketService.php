@@ -87,4 +87,9 @@ class TicketService
             return $ticket->delete();
         });
     }
+
+    public function bulkDelete(array $ids)
+    {
+        return $this->model::query()->whereIn('id', $ids)->delete();
+    }
 }

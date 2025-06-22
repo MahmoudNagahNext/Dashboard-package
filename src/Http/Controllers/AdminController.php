@@ -10,6 +10,7 @@ use nextdev\nextdashboard\Traits\ApiResponseTrait;
 use nextdev\nextdashboard\Http\Requests\Admin\AdminStoreRequest;
 use nextdev\nextdashboard\Http\Requests\Admin\AdminUpdateRequest;
 use nextdev\nextdashboard\Http\Requests\Admin\AssignRoleRequest;
+use nextdev\nextdashboard\Http\Requests\Admin\BulkDeleteRequest;
 use nextdev\nextdashboard\Http\Requests\Auth\RegisterRequest;
 use nextdev\nextdashboard\Http\Resources\AdminResource;
 use nextdev\nextdashboard\Services\AdminService;
@@ -96,6 +97,18 @@ class AdminController extends Controller
             return $this->successResponse($admin);
         } catch (\Exception $e) {
             return $this->handleException($e);   
+        }
+    }
+
+    public function bulkDelete(BulkDeleteRequest $request)
+    {
+        try{
+            $this->authorize('admin.delete');
+
+            $this->adminService->bulkDelete($request->validated()['ids']);
+            return $this->deletedResponse();
+        } catch(\Exception $e){
+            return $this->handleException($e);
         }
     }
 }
