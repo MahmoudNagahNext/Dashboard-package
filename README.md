@@ -64,8 +64,10 @@ php artisan vendor:publish --tag="permission-migrations"
 php artisan vendor:publish --tag="permission-config"
 php artisan migrate
 
-
-
+### 7. Spatia Laravel-activitylog
+php artisan vendor:publish --provider="Spatie\Activitylog\ActivitylogServiceProvider" --tag="activitylog-migrations"
+php artisan vendor:publish --provider="Spatie\Activitylog\ActivitylogServiceProvider" --tag="activitylog-config"
+php artisan migrate
 
 ## 📢 Available Events
 
