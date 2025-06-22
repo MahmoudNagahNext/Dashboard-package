@@ -6,7 +6,9 @@ use Illuminate\Support\ServiceProvider;
 use nextdev\nextdashboard\Console\ListEventsCommand;
 use nextdev\nextdashboard\MediaLibrary\PathGenerators\TicketPathGenerator;
 use nextdev\nextdashboard\Models\Admin;
+use nextdev\nextdashboard\Models\Ticket;
 use nextdev\nextdashboard\Observers\AdminObserver;
+use nextdev\nextdashboard\Observers\TicketObserver;
 use Spatie\MediaLibrary\Support\PathGenerator\PathGenerator;
 
 class PackageServiceProvider extends ServiceProvider
@@ -15,6 +17,7 @@ class PackageServiceProvider extends ServiceProvider
     {
 
         Admin::observe(AdminObserver::class);
+        Ticket::observe(TicketObserver::class);
 
         if ($this->app->runningInConsole()) {
             $this->commands([

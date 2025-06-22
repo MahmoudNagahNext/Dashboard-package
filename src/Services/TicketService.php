@@ -37,7 +37,6 @@ class TicketService
                     $ticket->addMedia($attachment)->toMediaCollection('attachments');
                 }
             }
-            activity()->log('Create Ticket');
             return $ticket;
         });
     }
@@ -74,7 +73,6 @@ class TicketService
                     $ticket->addMedia($file)->toMediaCollection('attachments');
                 }
             }
-            activity()->log('Update Ticket');
             return $ticket;
         });
     }
@@ -84,9 +82,7 @@ class TicketService
         return DB::transaction(function () use($id) {
             $ticket = $this->model::query()->find($id);
             $ticket->clearMediaCollection('attachments');
-            $ticket->delete();
-            activity()->log('Delete Ticket');
-            return true; 
+            return $ticket->delete(); 
         });
     }
 

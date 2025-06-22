@@ -22,15 +22,11 @@ class AdminService
     public function create(AdminDTO $dto)
     { 
         return DB::transaction(function() use ($dto){
-            $admin = $this->model::create([
+            return $this->model::create([
                 'name'=> $dto->name,
                 'email'=> $dto->email,
                 'password'=> Hash::make($dto->password),
             ]);
-
-            // activity()->log('Create Admin');
-
-            return $admin;
         });
     }
 
@@ -41,20 +37,15 @@ class AdminService
  
     public function update(array $data, $id)
     {
-        DB::transaction(function() use ($data, $id){
+        return DB::transaction(function() use ($data, $id){
             $user = $this->model::query()->find($id);
-            $user->update($data);
-
-            // activity()->log('Update Admin');
-            
-            return $user;
+            return $user->update($data);
         });
     }
  
     public function delete(int $id)
     {
         DB::transaction(function() use ($id){
-            // activity()->log('Delete Admin');
             $user = $this->model::query()->find($id);
             return $user->delete();
         });
