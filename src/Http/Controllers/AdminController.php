@@ -104,7 +104,7 @@ class AdminController extends Controller
             // $this->authorize('admin.delete');
 
             $this->adminService->bulkDelete($request->validated()['ids']);
-            return $this->deletedResponse();
+            return $this->deletedResponse('Admins deleted successfully');
         } catch(\Exception $e){
             return $this->handleException($e);
         }
