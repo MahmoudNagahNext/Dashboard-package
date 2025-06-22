@@ -2,6 +2,7 @@
 
 namespace nextdev\nextdashboard\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use nextdev\nextdashboard\Traits\ApiResponseTrait;
 use nextdev\nextdashboard\Models\TicketPriority;
@@ -11,24 +12,28 @@ class DropDownsController extends Controller
 {
     use ApiResponseTrait;
 
-    public function ticketStatuses()
+    public function ticketStatuses(Request $request)
     {
-        $items = TicketStatus::all()->map(function ($item) {
+        $lang = $request->get('lang', app()->getLocale()); // or use $request->header('Accept-Language')
+        
+        $items = TicketStatus::all()->map(function ($item) use ($lang) {
             return [
                 'id' => $item->id,
-                'name' => $item->getTranslation('name', app()->getLocale()),
+                'name' => $item->getTranslation('name', $lang),
             ];
         });
 
         return $this->successResponse($items);
     }
 
-    public function ticketPriorities()
+    public function ticketPriorities(Request $request)
     {
-        $items = TicketPriority::all()->map(function ($item) {
+        $lang = $request->get('lang', app()->getLocale()); // or use $request->header('Accept-Language')
+
+        $items = TicketPriority::all()->map(function ($item) use ($lang) {
             return [
                 'id' => $item->id,
-                'name' => $item->getTranslation('name', app()->getLocale()),
+                'name' => $item->getTranslation('name', $lang),
             ];
         });
 

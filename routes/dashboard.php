@@ -35,7 +35,7 @@ Route::prefix("dashboard")->group(function () {
             Route::apiResource('categories', TicketCategoriesController::class);
             Route::post("/categories/bulk-delete", [TicketCategoriesController::class, 'bulkDelete']);
     
-            Route::get('statuses', [DropDownsController::class, 'ticketStatuies']);
+            Route::get('statuses', [DropDownsController::class, 'ticketStatuses']);
             Route::get('priorities', [DropDownsController::class, 'ticketPriorities']);
         
              // Tickets resource
