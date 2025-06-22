@@ -28,7 +28,7 @@ class AdminService
                 'password'=> Hash::make($dto->password),
             ]);
 
-            activity()->log('Create Admin');
+            // activity()->log('Create Admin');
 
             return $admin;
         });
@@ -45,7 +45,7 @@ class AdminService
             $user = $this->model::query()->find($id);
             $user->update($data);
 
-            activity()->log('Update Admin');
+            // activity()->log('Update Admin');
             
             return $user;
         });
@@ -54,10 +54,9 @@ class AdminService
     public function delete(int $id)
     {
         DB::transaction(function() use ($id){
+            // activity()->log('Delete Admin');
             $user = $this->model::query()->find($id);
-            $user->delete();
-            activity()->log('Delete Admin');
-            return true;
+            return $user->delete();
         });
     }
 

@@ -5,12 +5,16 @@ namespace nextdev\nextdashboard\Providers;
 use Illuminate\Support\ServiceProvider;
 use nextdev\nextdashboard\Console\ListEventsCommand;
 use nextdev\nextdashboard\MediaLibrary\PathGenerators\TicketPathGenerator;
+use nextdev\nextdashboard\Models\Admin;
+use nextdev\nextdashboard\Observers\AdminObserver;
 use Spatie\MediaLibrary\Support\PathGenerator\PathGenerator;
 
 class PackageServiceProvider extends ServiceProvider
 {
     public function boot()
     {
+
+        Admin::observe(AdminObserver::class);
 
         if ($this->app->runningInConsole()) {
             $this->commands([
