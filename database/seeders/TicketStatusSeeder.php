@@ -1,8 +1,7 @@
 <?php
 
-namespace Database\seeders;
+namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use nextdev\nextdashboard\Models\TicketStatus;
 
@@ -13,11 +12,18 @@ class TicketStatusSeeder extends Seeder
      */
     public function run(): void
     {
-        $statuses = ['Open', 'In Progress', 'Resolved', 'Closed'];
+        $statuses = [
+            ['en' => 'Open', 'ar' => 'مفتوح'],
+            ['en' => 'In Progress', 'ar' => 'قيد المعالجة'],
+            ['en' => 'Resolved', 'ar' => 'تم الحل'],
+            ['en' => 'Closed', 'ar' => 'مغلق'],
+        ];
 
-        foreach ($statuses as $status) {
+        foreach ($statuses as $name) {
             TicketStatus::query()->updateOrCreate([
-                'name' => $status
+                'name->en' => $name['en'],
+            ], [
+                'name' => $name,
             ]);
         }
     }

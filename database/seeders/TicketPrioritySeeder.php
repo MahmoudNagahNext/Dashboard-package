@@ -2,22 +2,28 @@
 
 namespace Database\seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use nextdev\nextdashboard\Models\TicketPriority;
 
 class TicketPrioritySeeder extends Seeder
 {
-    /**
+   /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        $proirities = ['Low', 'Medium', 'High', 'Ergency'];
+        $priorities = [
+            ['en' => 'Low',     'ar' => 'منخفض'],
+            ['en' => 'Medium',  'ar' => 'متوسط'],
+            ['en' => 'High',    'ar' => 'عالٍ'],
+            ['en' => 'Urgency', 'ar' => 'عاجل'], // أصل الكلمة الصحيحة "Urgency" مش "Ergency"
+        ];
 
-        foreach ($proirities as $proirity) {
+        foreach ($priorities as $name) {
             TicketPriority::query()->updateOrCreate([
-                'name' => $proirity
+                'name->en' => $name['en'], // شرط البحث بالترجمة الإنجليزية
+            ], [
+                'name' => $name, // الحفظ بكل الترجمات
             ]);
         }
     }
