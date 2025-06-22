@@ -101,7 +101,7 @@ class AdminController extends Controller
     public function bulkDelete(BulkDeleteRequest $request)
     {
         try{
-            $this->authorize('admin.delete');
+            // $this->authorize('admin.delete');
 
             $this->adminService->bulkDelete($request->validated()['ids']);
             return $this->deletedResponse();

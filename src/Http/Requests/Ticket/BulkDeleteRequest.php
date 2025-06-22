@@ -14,7 +14,7 @@ class BulkDeleteRequest extends FormRequest
     {
         return [
             'ids' => 'required|array',
-            'ids.*' => 'string|exists:tickets,id',
+            'ids.*' => 'integer|exists:tickets,id',
         ];
     }
 }
