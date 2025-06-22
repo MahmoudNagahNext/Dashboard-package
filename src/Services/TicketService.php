@@ -37,7 +37,7 @@ class TicketService
                     $ticket->addMedia($attachment)->toMediaCollection('attachments');
                 }
             }
-
+            activity()->log('Create Ticket');
             return $ticket;
         });
     }
