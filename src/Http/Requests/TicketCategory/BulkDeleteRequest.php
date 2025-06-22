@@ -1,5 +1,5 @@
 <?php 
-namespace nextdev\nextdashboard\Http\Requests\Admin;
+namespace nextdev\nextdashboard\Http\Requests\TicketCategory;
 
 use Illuminate\Foundation\Http\FormRequest;
 
