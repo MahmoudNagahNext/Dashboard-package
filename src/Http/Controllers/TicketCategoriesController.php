@@ -63,7 +63,7 @@ class TicketCategoriesController extends Controller
         try{
             // $this->authorize('ticket.delete');
 
-            $this->service->bulkDelete($request->validated());
+            $this->service->bulkDelete($request->validated()['ids']);
             return $this->deletedResponse('Ticket Categories deleted successfully');
         } catch(\Exception $e){
             return $this->handleException($e);
