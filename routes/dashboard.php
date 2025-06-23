@@ -18,6 +18,7 @@ Route::prefix("dashboard")->group(function () {
     });
 
     Route::controller(ForgotPasswordController::class)
+    ->prefix('auth')
     ->group(function(){
         Route::post('/forgot-password', 'sendOtp');
         Route::post('/reset-password', 'resetPassword');
