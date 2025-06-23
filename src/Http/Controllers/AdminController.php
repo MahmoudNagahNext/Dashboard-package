@@ -5,7 +5,6 @@ namespace nextdev\nextdashboard\Http\Controllers;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use nextdev\nextdashboard\DTOs\AdminDTO;
-use nextdev\nextdashboard\Events\AdminCreated;
 use nextdev\nextdashboard\Traits\ApiResponseTrait;
 use nextdev\nextdashboard\Http\Requests\Admin\AdminStoreRequest;
 use nextdev\nextdashboard\Http\Requests\Admin\AdminUpdateRequest;

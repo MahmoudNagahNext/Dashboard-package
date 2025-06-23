@@ -26,7 +26,9 @@ class TicketController extends Controller
     public function index()
     {
         try{
-            // $this->authorize('ticket.view');
+            if (!auth()->guard('admin')->user()->hasPermissionTo('ticket.view')) {
+                return $this->errorResponse('Unauthorized.', 403);
+            }
 
             $tickets = $this->ticketService->paginate(['creator','assignee','status','priority','category', 'media']);
             return $this->paginatedCollectionResponse($tickets,'Tickets Paginated', [], TicketResource::class);
@@ -38,7 +40,9 @@ class TicketController extends Controller
     public function store(TicketStoreRequest $request)
     {
         try{
-            // $this->authorize('ticket.create');
+            if (!auth()->guard('admin')->user()->hasPermissionTo('ticket.create')) {
+                return $this->errorResponse('Unauthorized.', 403);
+            }
 
             $data = $request->validated();
             $data['attachments'] = $request->file('attachments',[]);
@@ -56,7 +60,9 @@ class TicketController extends Controller
     public function show(int $id)
     {
         try{
-            // $this->authorize('ticket.view');
+            if (!auth()->guard('admin')->user()->hasPermissionTo('ticket.view')) {
+                return $this->errorResponse('Unauthorized.', 403);
+            }
 
             $ticket = $this->ticketService->find($id,['creator','assignee','status','priority','category', 'media']);
             return $this->successResponse(TicketResource::make($ticket));
@@ -68,7 +74,9 @@ class TicketController extends Controller
     public function update(TicketUpdateRequest $request,int $id)
     {
         try{            
-            // $this->authorize('ticket.update');
+            if (!auth()->guard('admin')->user()->hasPermissionTo('ticket.update')) {
+                return $this->errorResponse('Unauthorized.', 403);
+            }
 
             $data = $request->validated();
             $data['attachments'] = $request->file('attachments',[]);
@@ -86,7 +94,9 @@ class TicketController extends Controller
     public function destroy(int $id)
     {
         try{
-            // $this->authorize('ticket.delete');
+            if (!auth()->guard('admin')->user()->hasPermissionTo('ticket.delete')) {
+                return $this->errorResponse('Unauthorized.', 403);
+            }
      
             $this->ticketService->delete($id);
             return $this->deletedResponse();
@@ -98,7 +108,10 @@ class TicketController extends Controller
     public function bulkDelete(BulkDeleteRequest $request)
     {
         try{
-            // $this->authorize('ticket.delete');
+            if (!auth()->guard('admin')->user()->hasPermissionTo('ticket.delete')) {
+                return $this->errorResponse('Unauthorized.', 403);
+            }
+            
             $this->ticketService->bulkDelete($request->validated()['ids']);
             return $this->deletedResponse('Tickets deleted successfully');
         } catch(\Exception $e){
