@@ -11,7 +11,7 @@ class TicketReply extends Model implements HasMedia
 {
     use InteractsWithMedia;
     
-    protected $fillable = ['ticket_id', 'user_id', 'body'];
+    protected $fillable = ['ticket_id', 'admin_id', 'body'];
     
     public function ticket()
     {
