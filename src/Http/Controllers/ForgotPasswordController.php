@@ -33,7 +33,7 @@ class ForgotPasswordController extends Controller
                     ->subject('OTP to recover password');
         });
 
-        return $this->showMessage(['message'=> "OTP Send successflly", "otp" => $otp]);
+        return response()->json(['message'=> "OTP Send successflly", "otp" => $otp]);
     }
 
     public function resetPassword(ResetPasswordRequest $request)
