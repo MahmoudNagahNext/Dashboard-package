@@ -4,10 +4,7 @@ namespace nextdev\nextdashboard\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-/**
- * @bodyParam img file optional The user image to upload. Example: avatar.jpg
- */
-class SendResetLinkEmailRequest extends FormRequest
+class sendOtpRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,7 +22,7 @@ class SendResetLinkEmailRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email|exists:admins,email',
+            'email' => 'required|email|exists:users,email',
         ];
     }
 }

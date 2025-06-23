@@ -4,9 +4,6 @@ namespace nextdev\nextdashboard\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-/**
- * @bodyParam img file optional The user image to upload. Example: avatar.jpg
- */
 class ResetPasswordRequest extends FormRequest
 {
     /**
@@ -25,8 +22,8 @@ class ResetPasswordRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'token' => 'required',
-            'email' => 'required|email|exists:admins,email',
+            'email' => 'required|email|exists:users,email',
+            'otp' => 'required',
             'password' => 'required|confirmed|min:8',
         ];
     }

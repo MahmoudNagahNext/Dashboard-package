@@ -4,9 +4,7 @@ use Illuminate\Support\Facades\Route;
 use nextdev\nextdashboard\Http\Controllers\AdminController;
 use nextdev\nextdashboard\Http\Controllers\AuthController;
 use nextdev\nextdashboard\Http\Controllers\DropDownsController;
-use nextdev\nextdashboard\Http\Controllers\PermissionController;
-use nextdev\nextdashboard\Http\Controllers\RoleController;
-use nextdev\nextdashboard\Http\Controllers\RolesController;
+use nextdev\nextdashboard\Http\Controllers\ForgotPasswordController;
 use nextdev\nextdashboard\Http\Controllers\TicketCategoriesController;
 use nextdev\nextdashboard\Http\Controllers\TicketController;
 use nextdev\nextdashboard\Http\Controllers\TicketReplyController;
@@ -16,10 +14,14 @@ Route::prefix("dashboard")->group(function () {
     // Auth routes
     Route::prefix('auth')->controller(AuthController::class)->group(function () {
         Route::post('login', 'login');
-
         Route::post('register', 'register');
-        // Route::post('/forgot-password', 'sendResetLinkEmail');
-        // Route::post('/reset-password', 'reset');
+    });
+
+    Route::controller(ForgotPasswordController::class)
+    ->prefix('auth')
+    ->group(function(){
+        Route::post('/forgot-password', 'sendOtp');
+        Route::post('/reset-password', 'resetPassword');
     });
 
     Route::middleware('auth:admin')->group( function () {
