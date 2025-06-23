@@ -48,4 +48,9 @@ class Ticket extends Model implements HasMedia
     {
         return $this->belongsTo(TicketPriority::class);
     }
+    
+    public function replies()
+    {
+        return $this->hasMany(TicketReply::class);
+    }
 }

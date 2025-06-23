@@ -9,6 +9,7 @@ use nextdev\nextdashboard\Http\Controllers\RoleController;
 use nextdev\nextdashboard\Http\Controllers\RolesController;
 use nextdev\nextdashboard\Http\Controllers\TicketCategoriesController;
 use nextdev\nextdashboard\Http\Controllers\TicketController;
+use nextdev\nextdashboard\Http\Controllers\TicketReplyController;
 
 Route::prefix("dashboard")->group(function () {
     
@@ -42,10 +43,14 @@ Route::prefix("dashboard")->group(function () {
              Route::apiResource('', TicketController::class)->parameters(['' => 'ticket']);
              Route::post("/bulk-delete", [TicketController::class, 'bulkDelete']);
         
+            // Ticket replies routes
+            Route::prefix("{ticket}/replies")->group(function () {
+                Route::get('/', [TicketReplyController::class, 'index']);
+                Route::post('/', [TicketReplyController::class, 'store']);
+                Route::get('/{reply}', [TicketReplyController::class, 'show']);
+                Route::put('/{reply}', [TicketReplyController::class, 'update']);
+                Route::delete('/{reply}', [TicketReplyController::class, 'delete']);
+            });
         });
-
-        // Roles & Permissions 
-        Route::apiResource('/roles',RoleController::class);
-        Route::GET("/permissions", [PermissionController::class, "index"]);
     });
 });
