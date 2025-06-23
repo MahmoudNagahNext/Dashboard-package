@@ -17,11 +17,11 @@ class TicketReplyResource extends JsonResource
         return [
             'id' => $this->id,
             'ticket_id' => $this->ticket_id,
-            'user_id' => $this->user_id,
+            'admin_id' => $this->admin_id,
             'body' => $this->body,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'user' => $this->whenLoaded('user'),
+            'admin' => $this->whenLoaded('admin'),
             'media' => $this->whenLoaded('media', function() {
                 return $this->media->map(function($media) {
                     return [

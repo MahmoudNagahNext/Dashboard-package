@@ -16,20 +16,20 @@ class TicketReplyService
     public function index(int $ticketId)
     {
         return $this->model->where('ticket_id', $ticketId)
-            ->with(['user', 'media'])
+            ->with(['admin', 'media'])
             ->orderBy('created_at', 'desc')
             ->get();
     }
 
     public function find(int $id)
     {
-        return $this->model->with(['user', 'media'])->findOrFail($id);
+        return $this->model->with(['admin', 'media'])->findOrFail($id);
     }
 
     public function create(array $data)
     {
         return DB::transaction(function () use ($data) {
-            $data['user_id'] = Auth::id();
+            $data['admin_id'] = Auth::id();
             $attachments = $data['attachments'] ?? null;
             unset($data['attachments']);
             
@@ -41,7 +41,7 @@ class TicketReplyService
                 }
             }
 
-            return $reply->load(['user', 'media']);
+            return $reply->load(['admin', 'media']);
         });
     }
 
@@ -62,7 +62,7 @@ class TicketReplyService
                 }
             }
 
-            return $reply->load(['user', 'media']);
+            return $reply->load(['admin', 'media']);
         });
     }
 
