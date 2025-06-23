@@ -5,6 +5,8 @@ use nextdev\nextdashboard\Http\Controllers\AdminController;
 use nextdev\nextdashboard\Http\Controllers\AuthController;
 use nextdev\nextdashboard\Http\Controllers\DropDownsController;
 use nextdev\nextdashboard\Http\Controllers\ForgotPasswordController;
+use nextdev\nextdashboard\Http\Controllers\PermissionController;
+use nextdev\nextdashboard\Http\Controllers\RoleController;
 use nextdev\nextdashboard\Http\Controllers\TicketCategoriesController;
 use nextdev\nextdashboard\Http\Controllers\TicketController;
 use nextdev\nextdashboard\Http\Controllers\TicketReplyController;
@@ -31,6 +33,11 @@ Route::prefix("dashboard")->group(function () {
         Route::apiResource('admins', AdminController::class);
         Route::post("/admins/bulk-delete", [AdminController::class, 'bulkDelete']);
         Route::post("/admins/{admin}/assign-role", [AdminController::class, 'assignRole']);
+
+
+        Route::apiResource('roles', RoleController::class);
+
+        Route::get('permissions', [PermissionController::class, 'index']);
 
         // Tickets routes
         Route::prefix("tickets")->group(function () {
