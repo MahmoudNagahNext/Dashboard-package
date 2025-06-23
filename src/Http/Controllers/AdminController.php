@@ -3,6 +3,7 @@
 namespace nextdev\nextdashboard\Http\Controllers;
 
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use nextdev\nextdashboard\DTOs\AdminDTO;
 use nextdev\nextdashboard\Events\AdminCreated;
 use nextdev\nextdashboard\Traits\ApiResponseTrait;
@@ -24,7 +25,7 @@ class AdminController extends Controller
     public function index()
     {
         try{
-            if (!auth()->guard('admin')->user()->hasPermissionTo('admin.view')) {
+            if (!Auth::guard('admin')->user()->hasPermissionTo('admin.view')) {
                 return $this->errorResponse('Unauthorized.', 403);
             }
             
@@ -38,12 +39,14 @@ class AdminController extends Controller
     public function store(AdminStoreRequest $request)
     {
         try{
-            // $this->authorize('admin.create');
+            if (!Auth::guard('admin')->user()->hasPermissionTo('admin.create')) {
+                return $this->errorResponse('Unauthorized.', 403);
+            }
 
             $dto = AdminDTO::fromRequest($request->validated());
             $admin = $this->adminService->create($dto);
 
-            event(new AdminCreated($admin));
+            // event(new AdminCreated($admin));
 
             return $this->createdResponse(AdminResource::make($admin));
         } catch(\Exception $e){
@@ -54,7 +57,9 @@ class AdminController extends Controller
     public function show(int $id)
     {
         try{
-            // $this->authorize('admin.view');
+            if (!Auth::guard('admin')->user()->hasPermissionTo('admin.view')) {
+                return $this->errorResponse('Unauthorized.', 403);
+            }
 
             return $this->successResponse(AdminResource::make($this->adminService->find($id)));
         } catch (\Exception $e){
@@ -65,7 +70,9 @@ class AdminController extends Controller
     public function update(AdminUpdateRequest $request,int $id)
     {
         try{
-            // $this->authorize('admin.update');
+            if (!Auth::guard('admin')->user()->hasPermissionTo('admin.update')) {
+                return $this->errorResponse('Unauthorized.', 403);
+            }
 
             $this->adminService->update($request->validated(), $id);
             return $this->updatedResponse();
@@ -77,7 +84,9 @@ class AdminController extends Controller
     public function destroy(int $id)
     {
         try{
-            // $this->authorize('admin.delete');
+            if (!Auth::guard('admin')->user()->hasPermissionTo('admin.delete')) {
+                return $this->errorResponse('Unauthorized.', 403);
+            }
 
             $this->adminService->delete($id);
             return $this->deletedResponse();
@@ -89,7 +98,10 @@ class AdminController extends Controller
     public function assignRole(AssignRoleRequest $request, int $id)
     {
         try{
-            // $this->authorize('admin.assign_role');
+            if (!Auth::guard('admin')->user()->hasPermissionTo('admin.assign_role')) {
+
+                return $this->errorResponse('Unauthorized.', 403);
+            }
 
             $admin = $this->adminService->AssignRole($request->validated()['role_id'], $id);
 
@@ -103,7 +115,9 @@ class AdminController extends Controller
     public function bulkDelete(BulkDeleteRequest $request)
     {
         try{
-            // $this->authorize('admin.delete');
+            if (!Auth::guard('admin')->user()->hasPermissionTo('admin.delete')) {
+                return $this->errorResponse('Unauthorized.', 403);
+            }
 
             $this->adminService->bulkDelete($request->validated()['ids']);
             return $this->deletedResponse('Admins deleted successfully');

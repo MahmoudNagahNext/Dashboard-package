@@ -21,7 +21,7 @@ class PermissionSeeder extends Seeder
         foreach ($models as $model => $actions) {
             foreach ($actions as $action) {
                 $permName = "$model.$action";
-                Permission::firstOrCreate(['name' => $permName]);
+                Permission::firstOrCreate(['name' => $permName, 'guard_name' => 'admin']);
                 $permissions[] = $permName;
             }
         }
