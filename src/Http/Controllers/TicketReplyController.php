@@ -29,7 +29,7 @@ class TicketReplyController extends Controller
                 201
             );
         } catch(\Exception $e) {
-            return $this->errorResponse('',$e->getMessage(), []);
+            return $this->errorResponse($e->getMessage(),500, []);
         }
     }
 
@@ -53,7 +53,7 @@ class TicketReplyController extends Controller
                 200
             );
         } catch (\Exception $e) {
-            return $this->errorResponse('',$e->getMessage(), []);
+            return $this->errorResponse($e->getMessage(),500, []);
         }
     }
 
@@ -67,7 +67,7 @@ class TicketReplyController extends Controller
                 200
             );
         } catch (\Exception $e) {
-            return $this->errorResponse('',$e->getMessage(), []);
+            return $this->errorResponse($e->getMessage(),500, []);
         }
     }
 
@@ -81,7 +81,7 @@ class TicketReplyController extends Controller
                 200
             );
         } catch (\Exception $e) {
-            return $this->errorResponse('',$e->getMessage(), []);
+            return $this->errorResponse($e->getMessage(),500, []);
         }
     }
 }
