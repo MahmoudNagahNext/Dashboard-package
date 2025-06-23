@@ -82,3 +82,4 @@ The following events are dispatched by the `nextdashboard` package:
 | `RoleAssignedToAdmin`    | Dispatched when a role is assigned to an admin.      |
 | `TicketCreated`          | Dispatched when a new ticket is created.             |
 | `TicketAssigned`         | Dispatched when a ticket is assigned to an admin.    |
+| `TicketReplied`          | Dispatched when a reply is added to a ticket.        |

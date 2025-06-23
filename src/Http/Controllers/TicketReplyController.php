@@ -5,6 +5,7 @@ namespace nextdev\nextdashboard\Http\Controllers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use nextdev\nextdashboard\Events\TicketReplied;
 use nextdev\nextdashboard\Http\Requests\TicketReply\StoreTicketReplyRequest;
 use nextdev\nextdashboard\Http\Requests\TicketReply\UpdateTicketReplyRequest;
 use nextdev\nextdashboard\Http\Resources\TicketReplyResource;
@@ -23,6 +24,14 @@ class TicketReplyController extends Controller
     {
         try{
             $reply = $this->ticketReplyService->create($request->validated());
+            
+            // Get the ticket and admin for the event
+            $ticket = $reply->ticket;
+            $admin = $reply->admin;
+            
+            // Dispatch the event
+            event(new TicketReplied($ticket, $reply, $admin));
+            
             return $this->successResponse(
                 TicketReplyResource::make($reply),
                 "Ticket Reply created successfully",

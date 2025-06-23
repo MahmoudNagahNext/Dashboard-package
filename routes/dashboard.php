@@ -8,6 +8,7 @@ use nextdev\nextdashboard\Http\Controllers\ForgotPasswordController;
 use nextdev\nextdashboard\Http\Controllers\TicketCategoriesController;
 use nextdev\nextdashboard\Http\Controllers\TicketController;
 use nextdev\nextdashboard\Http\Controllers\TicketReplyController;
+use nextdev\nextdashboard\Http\Controllers\NotificationController;
 
 Route::prefix("dashboard")->group(function () {
     
@@ -54,5 +55,15 @@ Route::prefix("dashboard")->group(function () {
                 Route::delete('/{reply}', [TicketReplyController::class, 'delete']);
             });
         });
+    });
+    // Add this inside the middleware('auth:admin') group
+    
+    // Notifications routes
+    Route::prefix('notifications')->controller(NotificationController::class)->group(function () {
+        Route::get('/', 'index');
+        Route::get('/unread', 'unread');
+        Route::post('/{id}/read', 'markAsRead');
+        Route::post('/read-all', 'markAllAsRead');
+        Route::delete('/{id}', 'delete');
     });
 });

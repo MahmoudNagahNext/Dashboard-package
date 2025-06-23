@@ -49,6 +49,9 @@ class PackageServiceProvider extends ServiceProvider
 
     public function register()
     {
+        // Register the event service provider
+        $this->app->register(EventServiceProvider::class);
+        
         // Merge package config
         // $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'laravelusermanager');
     }
