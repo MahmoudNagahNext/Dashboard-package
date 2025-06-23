@@ -2,13 +2,13 @@
 
 namespace nextdev\nextdashboard\Http\Controllers;
 
-use App\Models\PasswordOtp;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use nextdev\nextdashboard\Http\Requests\Auth\ResetPasswordRequest;
 use nextdev\nextdashboard\Http\Requests\Auth\sendOtpRequest;
 use nextdev\nextdashboard\Models\Admin;
+use nextdev\nextdashboard\Models\PasswordOtp;
 
 class ForgotPasswordController extends Controller
 {
