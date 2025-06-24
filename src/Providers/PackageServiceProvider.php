@@ -29,6 +29,9 @@ class PackageServiceProvider extends ServiceProvider
 
         // Load migrations
         $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
+        
+        // Load Views
+        $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'nextdashboard');
 
         // Publish config
         $this->publishes([
