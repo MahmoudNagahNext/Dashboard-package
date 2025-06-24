@@ -20,17 +20,13 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
-        try {
-            $admin = $this->authService->login($request->validated());
+        $admin = $this->authService->login($request->validated());
 
-            return $this->successResponse([
-                'admin' => AdminResource::make($admin),
-                'token' => $admin['api_token'],
-                'token_type' => 'Bearer'
-            ], 'Login successful');
-        } catch (\Exception $e) {
-            return $this->handleException($e);
-        }
+        return $this->successResponse([
+            'admin' => AdminResource::make($admin),
+            'token' => $admin['api_token'],
+            'token_type' => 'Bearer'
+        ], 'Login successful');
     }
 
     public function register(RegisterRequest $request)

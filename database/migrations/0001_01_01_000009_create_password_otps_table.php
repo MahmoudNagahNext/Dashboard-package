@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // TODO:: add foreign key to admins table
         Schema::create('password_otps', function (Blueprint $table) {
             $table->id();
             $table->string('email')->index();

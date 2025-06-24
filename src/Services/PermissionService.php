@@ -15,6 +15,7 @@ class PermissionService
 
     public function groupedPermissions()
     {
+        // TODO :: handel responce
         $permissions = $this->model::all();
 
         $grouped = $permissions->groupBy(function ($perm) {

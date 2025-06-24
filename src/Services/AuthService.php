@@ -12,6 +12,8 @@ class AuthService
 {
      public function login(array $credentials)
      {
+          // TODO:: Use Auth Facade to implement login functionality
+
           $admin = Admin::where('email', $credentials['email'])->first();
           
           // Verify password directly instead of using attempt
@@ -31,6 +33,9 @@ class AuthService
 
      public function register(AdminDTO $adminDTO)
      {
+          // TODO:: remove this method and add super admin user from seeder
+          // TODo::Look at spatia DTO
+
           $admin = Admin::create([
                'name'=> $adminDTO->name,
                'email'=> $adminDTO->email,

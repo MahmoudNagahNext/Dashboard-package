@@ -10,10 +10,12 @@ use Spatie\Permission\Models\Role;
 
 class AdminService
 {
+    // TODO:: function return type
     public function __construct(
         private Admin $model,
     ){}
 
+    // TODO:: add search and filters
     public function paginate()
     {
         return $this->model::query()->paginate(10);
@@ -21,6 +23,7 @@ class AdminService
  
     public function create(AdminDTO $dto)
     { 
+        //TODO:: remove transaction 
         return DB::transaction(function() use ($dto){
             return $this->model::create([
                 'name'=> $dto->name,

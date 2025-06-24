@@ -13,10 +13,13 @@ use nextdev\nextdashboard\Http\Requests\Admin\BulkDeleteRequest;
 use nextdev\nextdashboard\Http\Resources\AdminResource;
 use nextdev\nextdashboard\Services\AdminService;
 
+// TODO:: remove try and catch
 class AdminController extends Controller
 {
+    // TODO:: Delete ApiResponseTrait use responce Facades
     use ApiResponseTrait;
 
+    // TODO:: use can in the constarctor to check permissions 
     public function __construct(
         protected AdminService $adminService
     ){}
@@ -42,6 +45,7 @@ class AdminController extends Controller
                 return $this->errorResponse('Unauthorized.', 403);
             }
 
+            // TODO:: remove DTO pass validated 
             $dto = AdminDTO::fromRequest($request->validated());
             $admin = $this->adminService->create($dto);
 

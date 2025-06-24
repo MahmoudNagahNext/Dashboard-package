@@ -19,6 +19,8 @@ class TicketCategoriesController extends Controller
 
     public function index()
     {
+        // TODO:: add search and filters
+
         $items = $this->service->paginate();
         return $this->paginatedResponse($items);
     }

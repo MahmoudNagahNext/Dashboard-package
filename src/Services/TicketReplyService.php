@@ -31,7 +31,7 @@ class TicketReplyService
         return DB::transaction(function () use ($data) {
             $data['admin_id'] = Auth::id();
             $attachments = $data['attachments'] ?? null;
-            unset($data['attachments']);
+            // unset($data['attachments']);
             
             $reply = $this->model->create($data);
 

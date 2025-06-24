@@ -16,8 +16,9 @@ Route::prefix("dashboard")->group(function () {
     
     // Auth routes
     Route::prefix('auth')->controller(AuthController::class)->group(function () {
+        // TODO:: return role in login 
         Route::post('login', 'login');
-        Route::post('register', 'register');
+        Route::post('register', 'register'); // TODO ::DELETE this 
     });
 
     Route::controller(ForgotPasswordController::class)
@@ -27,6 +28,7 @@ Route::prefix("dashboard")->group(function () {
         Route::post('/reset-password', 'resetPassword');
     });
 
+    // TODO:: force to use admin gard from service provider
     Route::middleware('auth:admin')->group( function () {
 
         // Admin management
@@ -46,6 +48,7 @@ Route::prefix("dashboard")->group(function () {
             Route::apiResource('categories', TicketCategoriesController::class);
             Route::post("/categories/bulk-delete", [TicketCategoriesController::class, 'bulkDelete']);
     
+            // TODO:: add Enum for them 
             Route::get('statuses', [DropDownsController::class, 'ticketStatuses']);
             Route::get('priorities', [DropDownsController::class, 'ticketPriorities']);
         

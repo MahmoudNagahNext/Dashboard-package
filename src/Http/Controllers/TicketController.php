@@ -17,7 +17,7 @@ use nextdev\nextdashboard\Http\Requests\Ticket\BulkDeleteRequest;
 
 class TicketController extends Controller
 {
-    use ApiResponseTrait, AuthorizesRequests;
+    use ApiResponseTrait;
 
     public function __construct(
         protected TicketService $ticketService

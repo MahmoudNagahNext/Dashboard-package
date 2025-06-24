@@ -27,6 +27,7 @@ class ForgotPasswordController extends Controller
         );
 
         $user = Admin::where('email', $data['email'])->first();
+        // TODO:: create mail class to send otp
         // Mail::to($user->email)->send(new SendOtpMail($otp, $user));
         Mail::raw("You OTP is: $otp", function ($message) use ($data) {
             $message->to($data['email'])
@@ -38,6 +39,8 @@ class ForgotPasswordController extends Controller
 
     public function resetPassword(ResetPasswordRequest $request)
     {
+        // TODO :: last otp for admin , expair for exist otp for same admin
+        // TODO :: add cron job to delete expair otps
         $data = $request->validated();
 
         $record = PasswordOtp::where('email', $data['email'])

@@ -22,6 +22,7 @@ class TicketService
  
     public function create(TicketDTO $dto)
     {   
+        // TODO:: remove transaction 
         $data = (array) $dto;
         $attachments = $data['attachments'] ?? null;
         unset($data['attachments']);
@@ -66,6 +67,7 @@ class TicketService
 
             $ticket->update($data);
 
+            // TODO:: 2 endpoint (add media , delete media)
             if (!empty($dto->attachments)) {
                 $ticket->clearMediaCollection('attachments');
 
