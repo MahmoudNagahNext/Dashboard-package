@@ -27,9 +27,10 @@ class AdminController extends Controller
     public function index()
     {
         try{
-            if (!Auth::guard('admin')->user()->hasPermissionTo('admin.view')) {
-                return $this->errorResponse('Unauthorized.', 403);
-            }
+            dd(Auth::user());
+            // if (!Auth::guard('admin')->user()->hasPermissionTo('admin.view')) {
+            //     return $this->errorResponse('Unauthorized.', 403);
+            // }
             
             $admins = $this->adminService->paginate();
             return $this->paginatedCollectionResponse($admins,'Admins Paginated', [], AdminResource::class);    

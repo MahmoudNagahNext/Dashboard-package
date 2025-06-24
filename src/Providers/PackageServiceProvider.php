@@ -4,12 +4,11 @@ namespace nextdev\nextdashboard\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use nextdev\nextdashboard\Console\ListEventsCommand;
-use nextdev\nextdashboard\MediaLibrary\PathGenerators\TicketPathGenerator;
 use nextdev\nextdashboard\Models\Admin;
 use nextdev\nextdashboard\Models\Ticket;
 use nextdev\nextdashboard\Observers\AdminObserver;
 use nextdev\nextdashboard\Observers\TicketObserver;
-use Spatie\MediaLibrary\Support\PathGenerator\PathGenerator;
+use Illuminate\Support\Facades\Config;
 
 class PackageServiceProvider extends ServiceProvider
 {
@@ -51,8 +50,8 @@ class PackageServiceProvider extends ServiceProvider
     {
         // Register the event service provider
         $this->app->register(EventServiceProvider::class);
+
+        Config::set('auth.defaults.guard', 'admin');
         
-        // Merge package config
-        // $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'laravelusermanager');
     }
 }
