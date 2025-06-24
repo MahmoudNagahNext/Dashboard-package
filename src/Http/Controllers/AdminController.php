@@ -27,7 +27,7 @@ class AdminController extends Controller
     public function index()
     {
         try{
-            dd(Auth::user());
+            dd(Auth::user()->can('admin.view'));
             // if (!Auth::guard('admin')->user()->hasPermissionTo('admin.view')) {
             //     return $this->errorResponse('Unauthorized.', 403);
             // }
