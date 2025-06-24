@@ -4,7 +4,6 @@ namespace nextdev\nextdashboard\Http\Controllers;
 
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
-use nextdev\nextdashboard\DTOs\AdminDTO;
 use nextdev\nextdashboard\Traits\ApiResponseTrait;
 use nextdev\nextdashboard\Http\Requests\Admin\AdminStoreRequest;
 use nextdev\nextdashboard\Http\Requests\Admin\AdminUpdateRequest;
@@ -13,7 +12,6 @@ use nextdev\nextdashboard\Http\Requests\Admin\BulkDeleteRequest;
 use nextdev\nextdashboard\Http\Resources\AdminResource;
 use nextdev\nextdashboard\Services\AdminService;
 
-// TODO:: remove try and catch
 class AdminController extends Controller
 {
     // TODO:: Delete ApiResponseTrait use responce Facades
@@ -22,81 +20,71 @@ class AdminController extends Controller
     // TODO:: use can in the constarctor to check permissions 
     public function __construct(
         protected AdminService $adminService
-    ){}
+    ){
+        $this->middleware('can:admin.view')->only(['index', 'show']);
+        $this->middleware('can:admin.create')->only('store');
+        $this->middleware('can:admin.update')->only('update');
+        $this->middleware('can:admin.delete')->only(['destroy', 'bulkDelete']);
+        $this->middleware('can:admin.assign_role')->only('assignRole');
+    }
 
     public function index()
-    {
-        if (!Auth::user()->hasPermissionTo('admin.view')) {
-            return $this->errorResponse('Unauthorized.', 403);
-        }
-        
+    {   
         $admins = $this->adminService->paginate();
-        return $this->paginatedCollectionResponse($admins,'Admins Paginated', [], AdminResource::class);    
+        return $this->paginatedCollectionResponse(
+            $admins,
+            'Admins Paginated',
+            [], 
+            AdminResource::class);    
     }
 
     public function store(AdminStoreRequest $request)
     {
-        if (!Auth::guard('admin')->user()->hasPermissionTo('admin.create')) {
-            return $this->errorResponse('Unauthorized.', 403);
-        }
-
-        // TODO:: remove DTO pass validated 
-        $dto = AdminDTO::fromRequest($request->validated());
-        $admin = $this->adminService->create($dto);
-
+        $admin = $this->adminService->create($request->validated());
         // event(new AdminCreated($admin));
 
-        return $this->createdResponse(AdminResource::make($admin));
+        return $this->createdResponse(
+            AdminResource::make($admin),
+            'Admin created successfully'
+        );
     }
 
     public function show(int $id)
     {
-        if (!Auth::guard('admin')->user()->hasPermissionTo('admin.view')) {
-            return $this->errorResponse('Unauthorized.', 403);
-        }
-
-        return $this->successResponse(AdminResource::make($this->adminService->find($id)));
+        return $this->successResponse(
+            AdminResource::make($this->adminService->find($id)),
+            'Admin found successfully'
+        );
     }
 
     public function update(AdminUpdateRequest $request,int $id)
     {
-        if (!Auth::guard('admin')->user()->hasPermissionTo('admin.update')) {
-            return $this->errorResponse('Unauthorized.', 403);
-        }
-
         $this->adminService->update($request->validated(), $id);
-        return $this->updatedResponse();
+        return $this->updatedResponse(
+            [],
+            'Admin updated successfully'
+        );
     }
 
     public function destroy(int $id)
     {
-        if (!Auth::guard('admin')->user()->hasPermissionTo('admin.delete')) {
-            return $this->errorResponse('Unauthorized.', 403);
-        }
-
         $this->adminService->delete($id);
-        return $this->deletedResponse();
+        return $this->deletedResponse('Admin deleted successfully');
     }
 
     public function assignRole(AssignRoleRequest $request, int $id)
     {
-        // if (!Auth::guard('admin')->user()->hasPermissionTo('admin.assign_role')) {
-
-        //     return $this->errorResponse('Unauthorized.', 403);
-        // }
-
         $admin = $this->adminService->AssignRole($request->validated()['role_id'], $id);
-
         // event(new RoleAssignedToAdmin($admin, $role));
-        return $this->successResponse($admin);
+
+        return $this->successResponse(
+            AdminResource::make($admin),
+            'Admin role assigned successfully'
+        );
     }
 
     public function bulkDelete(BulkDeleteRequest $request)
     {
-        if (!Auth::guard('admin')->user()->hasPermissionTo('admin.delete')) {
-            return $this->errorResponse('Unauthorized.', 403);
-        }
-
         $this->adminService->bulkDelete($request->validated()['ids']);
         return $this->deletedResponse('Admins deleted successfully');
     }

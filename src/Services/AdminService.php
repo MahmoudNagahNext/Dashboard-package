@@ -21,16 +21,14 @@ class AdminService
         return $this->model::query()->paginate(10);
     }
  
-    public function create(AdminDTO $dto)
+    public function create(array $data)
     { 
         //TODO:: remove transaction 
-        return DB::transaction(function() use ($dto){
-            return $this->model::create([
-                'name'=> $dto->name,
-                'email'=> $dto->email,
-                'password'=> Hash::make($dto->password),
-            ]);
-        });
+        return $this->model::create([
+            'name'=> $data['name'],
+            'email'=> $data['email'],
+            'password'=> Hash::make($data['password']),
+        ]);
     }
 
     public function find(int $id)
@@ -40,18 +38,12 @@ class AdminService
  
     public function update(array $data, $id)
     {
-        return DB::transaction(function() use ($data, $id){
-            $user = $this->model::query()->find($id);
-            return $user->update($data);
-        });
+        return $this->model::query()->find($id)->update($data);
     }
  
     public function delete(int $id)
     {
-        DB::transaction(function() use ($id){
-            $user = $this->model::query()->find($id);
-            return $user->delete();
-        });
+        return  $this->model::query()->find($id)->delete();
     }
 
     public function AssignRole(int $roleId, int $adminId)
