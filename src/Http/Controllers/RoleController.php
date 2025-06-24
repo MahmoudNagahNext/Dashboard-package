@@ -17,13 +17,15 @@ class RoleController extends Controller
 
     public function __construct(
         protected RoleService $service
-    ) {}
+    ) {
+        $this->middleware('can:role.view')->only(['index', 'show']);
+        $this->middleware('can:role.create')->only('store');
+        $this->middleware('can:role.update')->only('update');
+        $this->middleware('can:role.delete')->only('destroy');
+    }
 
     public function index()
     {
-        // if (!auth()->guard('admin')->user()->hasPermissionTo('role.view')) {
-        //     return $this->errorResponse('Unauthorized.', 403);
-        // }
         return $this->successResponse(
             RoleResource::collection($this->service->index())
         );
@@ -31,10 +33,6 @@ class RoleController extends Controller
 
     public function store(RoleStoreRequest $request)
     {
-        if (!auth()->guard('admin')->user()->hasPermissionTo('role.create')) {
-            return $this->errorResponse('Unauthorized.', 403);
-        }
-
         $role = $this->service->store($request->validated());
 
         return $this->createdResponse(
@@ -44,10 +42,6 @@ class RoleController extends Controller
 
     public function show(int $id)
     {
-        if (!auth()->guard('admin')->user()->hasPermissionTo('role.view')) {
-            return $this->errorResponse('Unauthorized.', 403);
-        }
-
         return $this->successResponse(
             RoleResource::make($this->service->find($id))
         );
@@ -55,22 +49,12 @@ class RoleController extends Controller
 
     public function update(RoleUpdateRequest $request, int $id)
     {
-
-        if (!auth()->guard('admin')->user()->hasPermissionTo('role.update')) {
-            return $this->errorResponse('Unauthorized.', 403);
-        }
-
         $role = $this->service->update($id, $request->validated());
         return $this->updatedResponse([], "Role Updated Successfully");
     }
 
     public function destroy(int $id)
     {
-
-        if (!auth()->guard('admin')->user()->hasPermissionTo('role.delete')) {
-            return $this->errorResponse('Unauthorized.', 403);
-        }
-
         $this->service->delete($id);
         return $this->deletedResponse("Role Deleted Successfully");
     }
