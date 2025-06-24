@@ -20,8 +20,6 @@ class TicketCategoriesController extends Controller
 
     public function index(Request $request)
     {
-        // TODO:: add search and filters
-
         $items = $this->service->paginate(
             $request->input('search'),
             [],
@@ -31,7 +29,7 @@ class TicketCategoriesController extends Controller
             $request->input('sort_direction', 'desc'),
             $request->input('filters', [])
         );
-        
+
         return $this->paginatedResponse($items);
     }
 

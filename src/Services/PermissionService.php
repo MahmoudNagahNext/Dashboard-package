@@ -2,6 +2,7 @@
 
 namespace nextdev\nextdashboard\Services;
 
+use nextdev\nextdashboard\Http\Resources\PermissionResource;
 use Spatie\Permission\Models\Permission;
 
 class PermissionService
@@ -15,13 +16,16 @@ class PermissionService
 
     public function groupedPermissions()
     {
-        // TODO :: handel responce
         $permissions = $this->model::all();
 
         $grouped = $permissions->groupBy(function ($perm) {
-            return explode('.', $perm->name)[0];
+            return explode('.', $perm->name)[0]; // مثل: admin.create → admin
         });
 
-        return $grouped; 
+        $formatted = $grouped->map(function ($group) {
+            return PermissionResource::collection($group);
+        });
+
+        return $formatted; 
     }
 }

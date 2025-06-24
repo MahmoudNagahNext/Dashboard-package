@@ -39,7 +39,6 @@ class TicketService
 
     public function create(TicketDTO $dto)
     {
-        // TODO:: remove transaction 
         $data = (array) $dto;
         $attachments = $data['attachments'] ?? null;
 

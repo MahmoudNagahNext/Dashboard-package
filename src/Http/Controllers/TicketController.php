@@ -10,7 +10,6 @@ use nextdev\nextdashboard\Http\Requests\Ticket\TicketStoreRequest;
 use nextdev\nextdashboard\Http\Requests\Ticket\TicketUpdateRequest;
 use nextdev\nextdashboard\Http\Resources\TicketResource;
 use nextdev\nextdashboard\Services\TicketService;
-use nextdev\nextdashboard\Events\TicketCreated;
 use nextdev\nextdashboard\Http\Requests\Ticket\BulkDeleteRequest;
 
 
