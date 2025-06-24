@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class PasswordOtp extends Model
 {
     protected $fillable = [
-        "email",
+        "admin_id",
         "otp",
         "expires_at"
     ];
