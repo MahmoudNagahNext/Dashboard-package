@@ -19,6 +19,9 @@ class AdminSeeder extends Seeder
             "password" => Hash::make("admin@123"),
         ];
 
-       Admin::query()->create($data);
+        $admin = Admin::query()->create($data);
+        
+        $admin->assignRole("super_admin");
+
     }
 }
