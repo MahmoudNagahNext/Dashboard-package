@@ -22,8 +22,8 @@ class AdminService
             $q->where('name', 'like', "%{$search}%")
             ->orWhere('email', 'like', "%{$search}%");
         }
-        
-        return $q->paginate($perPage, $sortBy, $sortDirection, $page);
+
+        return $q->paginate($perPage, ['*'],$sortBy, $sortDirection, $page);
     }
  
     public function create(array $data)
