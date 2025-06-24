@@ -9,6 +9,7 @@ use nextdev\nextdashboard\Models\Ticket;
 use nextdev\nextdashboard\Observers\AdminObserver;
 use nextdev\nextdashboard\Observers\TicketObserver;
 use Illuminate\Support\Facades\Config;
+use nextdev\nextdashboard\Console\DeleteExpiredOtps;
 
 class PackageServiceProvider extends ServiceProvider
 {
@@ -21,6 +22,7 @@ class PackageServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 ListEventsCommand::class,
+                DeleteExpiredOtps::class,
             ]);
         }
 
