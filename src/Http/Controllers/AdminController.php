@@ -37,7 +37,7 @@ class AdminController extends Controller
         $sortDirection = $request->get('sort_direction', 'desc');
         
         $admins = $this->adminService->paginate($search, $with, $perPage, $page, $sortBy, $sortDirection);
-        dd($admins);
+        
         return $this->paginatedCollectionResponse(
             $admins,
             'Admins Paginated',
