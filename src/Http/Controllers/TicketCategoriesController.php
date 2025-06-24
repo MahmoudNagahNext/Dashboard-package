@@ -2,6 +2,7 @@
 
 namespace nextdev\nextdashboard\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use nextdev\nextdashboard\Traits\ApiResponseTrait;
 use nextdev\nextdashboard\Http\Requests\TicketCategory\BulkDeleteRequest;
@@ -17,11 +18,20 @@ class TicketCategoriesController extends Controller
         protected TicketCategoriesService $service
     ) {}
 
-    public function index()
+    public function index(Request $request)
     {
         // TODO:: add search and filters
 
-        $items = $this->service->paginate();
+        $items = $this->service->paginate(
+            $request->input('search'),
+            [],
+            $request->input('per_page', 10),
+            $request->input('page', 1),
+            $request->input('sort_by', 'id'),
+            $request->input('sort_direction', 'desc'),
+            $request->input('filters', [])
+        );
+        
         return $this->paginatedResponse($items);
     }
 

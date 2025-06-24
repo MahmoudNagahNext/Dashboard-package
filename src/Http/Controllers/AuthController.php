@@ -3,10 +3,8 @@
 namespace nextdev\nextdashboard\Http\Controllers;
 
 use Illuminate\Routing\Controller;
-use nextdev\nextdashboard\DTOs\AdminDTO;
 use nextdev\nextdashboard\Traits\ApiResponseTrait;
 use nextdev\nextdashboard\Http\Requests\Auth\LoginRequest;
-use nextdev\nextdashboard\Http\Requests\Auth\RegisterRequest;
 use nextdev\nextdashboard\Http\Resources\AdminResource;
 use nextdev\nextdashboard\Services\AuthService;
 

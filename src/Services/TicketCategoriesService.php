@@ -10,9 +10,24 @@ class TicketCategoriesService
         protected TicketCategory $model
     ){}
 
-    public function paginate()
+    public function paginate($search = null, $with = [], $perPage = 10, $page = 1, $sortBy = 'id', $sortDirection = 'desc', $filters = [])
     {
-        return $this->model::query()->paginate(10);
+        $q = $this->model::query()->with($with);
+
+        if ($search) {
+            $q->where('name', 'like', "%{$search}%");
+        }
+
+        // Apply filters
+        foreach ($filters as $field => $value) {
+            if (!is_null($value)) {
+                $q->where($field, $value);
+            }
+        }
+
+        $q->orderBy($sortBy, $sortDirection);
+
+        return $q->paginate($perPage, ['*'], 'page', $page);
     }
  
     public function create(array $data)
