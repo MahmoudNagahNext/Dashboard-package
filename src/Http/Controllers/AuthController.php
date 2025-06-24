@@ -28,20 +28,4 @@ class AuthController extends Controller
             'token_type' => 'Bearer'
         ], 'Login successful');
     }
-
-    public function register(RegisterRequest $request)
-    {
-        try {
-            $adminDTO = AdminDTO::fromRequest($request->validated());
-            $admin = $this->authService->register($adminDTO);
-
-            return $this->createdResponse([
-                'user' => AdminResource::make($admin),
-                'token' => $admin['api_token'],
-                'token_type' => 'Bearer'
-            ], 'User Created Successfully');
-        } catch (\Exception $e) {
-            return $this->handleException($e);
-        }
-    }
 }

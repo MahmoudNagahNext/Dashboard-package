@@ -14,41 +14,34 @@ class AuthService
      {
           // TODO:: Use Auth Facade to implement login functionality
 
-          $admin = Admin::where('email', $credentials['email'])->first();
+          // $admin = Admin::where('email', $credentials['email'])->first();
           
-          // Verify password directly instead of using attempt
-          if (!$admin || !Hash::check($credentials['password'], $admin->password)) {
-              throw new \Exception("Invalid credentials");
+          // // Verify password directly instead of using attempt
+          // if (!$admin || !Hash::check($credentials['password'], $admin->password)) {
+          //     throw new \Exception("Invalid credentials");
+          // }
+
+          // // Generate token manually
+          // $token = hash('sha256', Str::random(60));
+
+          // // Save token in database
+          // $admin->api_token = $token;
+          // $admin->save();
+
+          // return $admin->load('roles');
+
+
+          if (!Auth::guard('admin')->attempt($credentials)) {
+               throw new \Exception("Invalid credentials");
           }
 
-          // Generate token manually
-          $token = hash('sha256', Str::random(60));
+          $admin = Auth::guard('admin')->user();
 
-          // Save token in database
-          $admin->api_token = $token;
-          $admin->save();
+         $token = $admin->createToken('admin-token')->plainTextToken;
 
-          return $admin->load('roles');
-     }
-
-     public function register(AdminDTO $adminDTO)
-     {
-          // TODO:: remove this method and add super admin user from seeder
-          // TODo::Look at spatia DTO
-
-          $admin = Admin::create([
-               'name'=> $adminDTO->name,
-               'email'=> $adminDTO->email,
-               'password'=> Hash::make($adminDTO->password),
-          ]);
-
-          // Generate token manually
-          $token = hash('sha256', Str::random(60));
-
-          // Save token in database
-          $admin->api_token = $token;
-          $admin->save();
-          
-          return $admin;
+          return [
+               'admin' => $admin->load('roles'),
+               'token' => $token,
+          ];
      }
 }

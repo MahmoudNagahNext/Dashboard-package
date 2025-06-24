@@ -16,9 +16,7 @@ Route::prefix("dashboard")->group(function () {
     
     // Auth routes
     Route::prefix('auth')->controller(AuthController::class)->group(function () {
-        // TODO:: return role in login 
         Route::post('login', 'login');
-        Route::post('register', 'register'); // TODO ::DELETE this 
     });
 
     Route::controller(ForgotPasswordController::class)
