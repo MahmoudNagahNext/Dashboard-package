@@ -11,8 +11,11 @@ use nextdev\nextdashboard\Http\Controllers\TicketCategoriesController;
 use nextdev\nextdashboard\Http\Controllers\TicketController;
 use nextdev\nextdashboard\Http\Controllers\TicketReplyController;
 use nextdev\nextdashboard\Http\Controllers\NotificationController;
+use nextdev\nextdashboard\Http\Middleware\HandleAuthorizationException;
 
-Route::prefix("dashboard")->group(function () {
+Route::prefix("dashboard")
+->middleware([HandleAuthorizationException::class])
+->group(function () {
     
     // Auth routes
     Route::prefix('auth')->controller(AuthController::class)->group(function () {
