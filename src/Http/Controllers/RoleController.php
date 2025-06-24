@@ -20,9 +20,9 @@ class RoleController extends Controller
     
     public function index()
     {
-        if (!auth()->guard('admin')->user()->hasPermissionTo('role.view')) {
-            return $this->errorResponse('Unauthorized.', 403);
-        }
+        // if (!auth()->guard('admin')->user()->hasPermissionTo('role.view')) {
+        //     return $this->errorResponse('Unauthorized.', 403);
+        // }
         return $this->successResponse(
             RoleResource::collection($this->service->index())
         );
