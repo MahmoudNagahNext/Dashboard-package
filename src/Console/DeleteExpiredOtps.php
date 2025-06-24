@@ -5,6 +5,7 @@ namespace nextdev\nextdashboard\Console;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use nextdev\nextdashboard\Models\PasswordOtp;
 
 class DeleteExpiredOtps extends Command
 {
@@ -13,10 +14,9 @@ class DeleteExpiredOtps extends Command
 
     public function handle()
     {
-        $deleted = DB::table('otps')
-            ->where('expires_at', '<', Carbon::now())
-            ->delete();
+        PasswordOtp::where('expires_at', '<', now())->delete();
 
-        $this->info("Deleted $deleted expired OTPs.");
+        $this->info("Expired OTPs Deleted Successfully.");
+
     }
 } 
