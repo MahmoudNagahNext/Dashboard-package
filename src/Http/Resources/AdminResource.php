@@ -20,7 +20,7 @@ class AdminResource extends JsonResource
             'email' => $this->email,
             'status' => $this->status == 1 ? 'Active' : 'Inactive',
             "role" => $this->whenLoaded('roles', function(){
-                return RoleResource::make($this->roles);
+                return RoleResource::make($this->roles->first());
             }),
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
             'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
