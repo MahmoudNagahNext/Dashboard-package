@@ -2,6 +2,7 @@
 
 namespace nextdev\nextdashboard\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use nextdev\nextdashboard\DTOs\TicketDTO;
 use nextdev\nextdashboard\Traits\ApiResponseTrait;
@@ -26,11 +27,33 @@ class TicketController extends Controller
         $this->middleware('can:ticket.delete')->only('destroy');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $tickets = $this->ticketService->paginate(['creator', 'assignee', 'status', 'priority', 'category', 'media']);
-        return $this->paginatedCollectionResponse($tickets, 'Tickets Paginated', [], TicketResource::class);
+        $search = $request->get('search');
+        $with = ['creator', 'assignee', 'status', 'priority', 'category', 'media'];
+        $perPage = $request->get('per_page', 10);
+        $page = $request->get('page', 1);
+        $sortBy = $request->get('sort_by', 'id');
+        $sortDirection = $request->get('sort_direction', 'desc');
+
+        $filters = $request->only([
+            'status_id', 
+            'priority_id', 
+            'creator_id', 
+            'assignee_id', 
+            'category_id'
+        ]);
+
+        $tickets = $this->ticketService->paginate($search, $with, $perPage, $page, $sortBy, $sortDirection, $filters);
+
+        return $this->paginatedCollectionResponse(
+            $tickets,
+            'Tickets Paginated',
+            [],
+            TicketResource::class
+        );
     }
+
 
     public function store(TicketStoreRequest $request)
     {

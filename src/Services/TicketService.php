@@ -15,10 +15,27 @@ class TicketService
         protected Ticket $model,
     ) {}
 
-    public function paginate(array $with)
+    public function paginate($search = null, $with = [], $perPage = 10, $page = 1, $sortBy = 'id', $sortDirection = 'desc', $filters = [])
     {
-        return $this->model::query()->with($with)->paginate(10);
+        $q = $this->model::query()->with($with);
+
+        if ($search) {
+            $q->where('title', 'like', "%{$search}%")
+            ->orWhere('description', 'like', "%{$search}%");
+        }
+
+        // Apply filters
+        foreach ($filters as $field => $value) {
+            if (!is_null($value)) {
+                $q->where($field, $value);
+            }
+        }
+
+        $q->orderBy($sortBy, $sortDirection);
+
+        return $q->paginate($perPage, ['*'], 'page', $page);
     }
+
 
     public function create(TicketDTO $dto)
     {
