@@ -14,7 +14,10 @@ return new class extends Migration
         // TODO:: add foreign key to admins table
         Schema::create('password_otps', function (Blueprint $table) {
             $table->id();
-            $table->string('email')->index();
+            $table->foreignId('admin_id')
+                ->constrained('admins')
+                ->cascadeOnDelete();
+            // $table->string('email')->index();
             $table->string('otp');
             $table->timestamp('expires_at');
             $table->timestamps();

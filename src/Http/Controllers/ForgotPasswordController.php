@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use nextdev\nextdashboard\Http\Requests\Auth\ResetPasswordRequest;
 use nextdev\nextdashboard\Http\Requests\Auth\sendOtpRequest;
+use nextdev\nextdashboard\Mail\SendOtpMail;
 use nextdev\nextdashboard\Models\Admin;
 use nextdev\nextdashboard\Models\PasswordOtp;
 
@@ -17,22 +18,21 @@ class ForgotPasswordController extends Controller
         $data = $request->validated();
 
         $otp = rand(100000, 999999);
-        
+        $admin = Admin::where('email', $data['email'])->first();
+        if (! $admin) {
+            return response()->json(['message' => 'Email not found.'], 422);
+        }
+
         PasswordOtp::updateOrCreate(
-            ['email' => $data['email']],
+            ['admin_id' => $admin->id],
             [
                 'otp' => $otp,
                 'expires_at' => now()->addMinutes(10),
             ]
         );
 
-        $user = Admin::where('email', $data['email'])->first();
         // TODO:: create mail class to send otp
-        // Mail::to($user->email)->send(new SendOtpMail($otp, $user));
-        Mail::raw("You OTP is: $otp", function ($message) use ($data) {
-            $message->to($data['email'])
-                    ->subject('OTP to recover password');
-        });
+        Mail::to($admin->email)->send(new SendOtpMail($otp, $admin));
 
         return response()->json(['message'=> "OTP Send successflly", "otp" => $otp]);
     }

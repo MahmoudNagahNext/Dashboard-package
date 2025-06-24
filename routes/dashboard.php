@@ -26,7 +26,6 @@ Route::prefix("dashboard")->group(function () {
         Route::post('/reset-password', 'resetPassword');
     });
 
-    // TODO:: force to use admin gard from service provider
     Route::middleware('auth:admin')->group( function () {
 
         // Admin management
