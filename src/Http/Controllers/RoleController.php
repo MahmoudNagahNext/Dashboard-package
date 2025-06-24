@@ -3,6 +3,7 @@
 namespace nextdev\nextdashboard\Http\Controllers;
 
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use nextdev\nextdashboard\Http\Requests\Role\RoleStoreRequest;
 use nextdev\nextdashboard\Http\Requests\Role\RoleUpdateRequest;
@@ -24,12 +25,25 @@ class RoleController extends Controller
         $this->middleware('can:role.delete')->only('destroy');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        return $this->successResponse(
-            RoleResource::collection($this->service->index())
+        $search = $request->get('search');
+        $with = ['permissions'];
+        $perPage = $request->get('per_page', 10);
+        $page = $request->get('page', 1);
+        $sortBy = $request->get('sort_by', 'id');
+        $sortDirection = $request->get('sort_direction', 'desc');
+
+        $roles = $this->service->paginate($search, $with, $perPage, $page, $sortBy, $sortDirection);
+
+        return $this->paginatedCollectionResponse(
+            $roles,
+            'Roles Paginated',
+            [],
+            RoleResource::class
         );
     }
+
 
     public function store(RoleStoreRequest $request)
     {

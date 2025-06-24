@@ -11,12 +11,20 @@ class RoleService
     public function __construct(
         private Role $model,
     ) {}
-
-    public function index()
+    
+    public function paginate($search = null, $with = [], $perPage = 10, $page = 1, $sortBy = 'id', $sortDirection = 'desc')
     {
-        $roles = $this->model::query()->with('permissions')->get();
-        return $roles;
+        $q = $this->model::query()->with($with);
+
+        if ($search) {
+            $q->where('name', 'like', "%{$search}%");
+        }
+
+        $q->orderBy($sortBy, $sortDirection);
+
+        return $q->paginate($perPage, ['*'], 'page', $page);
     }
+
 
     public function store(array $data)
     {

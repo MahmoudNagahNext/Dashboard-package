@@ -13,7 +13,6 @@ class AdminService
         private Admin $model,
     ){}
 
-    // TODO:: add search and filters
     public function paginate($search = null, $with = [], $perPage = 10, $page = 1, $sortBy = 'id', $sortDirection = 'desc')
     {
         $q = $this->model::query()->with($with);
