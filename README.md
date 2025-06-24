@@ -16,6 +16,7 @@ php artisan vendor:publish --tag=nextdashboard-migrations
 php artisan vendor:publish --tag=nextdashboard-seeders
 
 ### 3. Run the seeders
+php artisan db:seed --class=AdminSeeder
 php artisan db:seed --class=TicketPrioritySeeder
 php artisan db:seed --class=TicketStatusSeeder
 

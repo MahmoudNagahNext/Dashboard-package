@@ -28,7 +28,7 @@ class AuthService
           $admin->api_token = $token;
           $admin->save();
 
-          return $admin;
+          return $admin->load('roles');
      }
 
      public function register(AdminDTO $adminDTO)
