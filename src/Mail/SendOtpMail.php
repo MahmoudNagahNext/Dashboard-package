@@ -24,6 +24,6 @@ class SendOtpMail extends Mailable
     public function build()
     {
         return $this->subject('OTP to Recover Your Password')
-                    ->markdown('emails.otp');
+            ->markdown('nextdashboard::emails.otp');
     }
 }
