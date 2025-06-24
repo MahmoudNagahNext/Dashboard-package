@@ -15,7 +15,7 @@ class TicketCategoriesController extends Controller
 
     public function __construct(
         protected TicketCategoriesService $service
-    ){}
+    ) {}
 
     public function index()
     {
@@ -27,12 +27,8 @@ class TicketCategoriesController extends Controller
 
     public function store(TicketCategoryStoreRequest $request)
     {
-        try{
-            $item = $this->service->create($request->validated());
-            return $this->createdResponse($item);
-        } catch(\Exception $e){
-            return $this->handleException($e);
-        }
+        $item = $this->service->create($request->validated());
+        return $this->createdResponse($item);
     }
 
     public function show(int $id)
@@ -40,36 +36,24 @@ class TicketCategoriesController extends Controller
         return $this->successResponse($this->service->find($id));
     }
 
-    public function update(TicketCategoryUpdateRequest $request,int $id)
+    public function update(TicketCategoryUpdateRequest $request, int $id)
     {
-        try{
-            $this->service->update($request->validated(), $id);
-            return $this->updatedResponse();
-        } catch(\Exception $e){
-            return $this->handleException($e);
-        }
+
+        $this->service->update($request->validated(), $id);
+        return $this->updatedResponse();
     }
 
     public function destroy(int $id)
     {
-        try{
-            $this->service->delete($id);
-            return $this->deletedResponse();
-        } catch(\Exception $e){
-            return $this->handleException($e);
-        }
+        $this->service->delete($id);
+        return $this->deletedResponse();
     }
 
     public function bulkDelete(BulkDeleteRequest $request)
     {
-        try{
-            // $this->authorize('ticket.delete');
+        // $this->authorize('ticket.delete');
 
-            $this->service->bulkDelete($request->validated()['ids']);
-            return $this->deletedResponse('Ticket Categories deleted successfully');
-        } catch(\Exception $e){
-            return $this->handleException($e);
-        }
+        $this->service->bulkDelete($request->validated()['ids']);
+        return $this->deletedResponse('Ticket Categories deleted successfully');
     }
-
 }

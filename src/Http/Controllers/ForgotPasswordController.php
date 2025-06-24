@@ -38,7 +38,6 @@ class ForgotPasswordController extends Controller
 
     public function resetPassword(ResetPasswordRequest $request)
     {
-        // TODO :: add cron job to delete expair otps
         $data = $request->validated();
         $admin = Admin::where('email', $data['email'])->first();
         if (! $admin) {
@@ -54,12 +53,10 @@ class ForgotPasswordController extends Controller
             return response()->json(['message' => 'OTP is invalid or expired.'], 422);
         }
 
-        // تحديث الباسورد
         $admin->update([
             'password' => Hash::make($data['password']),
         ]);
 
-        // حذف الـ OTP
         $record->delete();
 
         return response()->json(['message' => "Password Updated Successflly"]);

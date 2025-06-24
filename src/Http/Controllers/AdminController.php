@@ -26,106 +26,78 @@ class AdminController extends Controller
 
     public function index()
     {
-        try{
-            if (!Auth::user()->hasPermissionTo('admin.view')) {
-                return $this->errorResponse('Unauthorized.', 403);
-            }
-            
-            $admins = $this->adminService->paginate();
-            return $this->paginatedCollectionResponse($admins,'Admins Paginated', [], AdminResource::class);    
-        } catch (\Exception $e) {
-             return $this->handleException($e);
+        if (!Auth::user()->hasPermissionTo('admin.view')) {
+            return $this->errorResponse('Unauthorized.', 403);
         }
+        
+        $admins = $this->adminService->paginate();
+        return $this->paginatedCollectionResponse($admins,'Admins Paginated', [], AdminResource::class);    
     }
 
     public function store(AdminStoreRequest $request)
     {
-        try{
-            if (!Auth::guard('admin')->user()->hasPermissionTo('admin.create')) {
-                return $this->errorResponse('Unauthorized.', 403);
-            }
-
-            // TODO:: remove DTO pass validated 
-            $dto = AdminDTO::fromRequest($request->validated());
-            $admin = $this->adminService->create($dto);
-
-            // event(new AdminCreated($admin));
-
-            return $this->createdResponse(AdminResource::make($admin));
-        } catch(\Exception $e){
-            return $this->handleException($e);
+        if (!Auth::guard('admin')->user()->hasPermissionTo('admin.create')) {
+            return $this->errorResponse('Unauthorized.', 403);
         }
+
+        // TODO:: remove DTO pass validated 
+        $dto = AdminDTO::fromRequest($request->validated());
+        $admin = $this->adminService->create($dto);
+
+        // event(new AdminCreated($admin));
+
+        return $this->createdResponse(AdminResource::make($admin));
     }
 
     public function show(int $id)
     {
-        try{
-            if (!Auth::guard('admin')->user()->hasPermissionTo('admin.view')) {
-                return $this->errorResponse('Unauthorized.', 403);
-            }
-
-            return $this->successResponse(AdminResource::make($this->adminService->find($id)));
-        } catch (\Exception $e){
-             return $this->handleException($e);
+        if (!Auth::guard('admin')->user()->hasPermissionTo('admin.view')) {
+            return $this->errorResponse('Unauthorized.', 403);
         }
+
+        return $this->successResponse(AdminResource::make($this->adminService->find($id)));
     }
 
     public function update(AdminUpdateRequest $request,int $id)
     {
-        try{
-            if (!Auth::guard('admin')->user()->hasPermissionTo('admin.update')) {
-                return $this->errorResponse('Unauthorized.', 403);
-            }
-
-            $this->adminService->update($request->validated(), $id);
-            return $this->updatedResponse();
-        } catch(\Exception $e){
-            return $this->handleException($e);
+        if (!Auth::guard('admin')->user()->hasPermissionTo('admin.update')) {
+            return $this->errorResponse('Unauthorized.', 403);
         }
+
+        $this->adminService->update($request->validated(), $id);
+        return $this->updatedResponse();
     }
 
     public function destroy(int $id)
     {
-        try{
-            if (!Auth::guard('admin')->user()->hasPermissionTo('admin.delete')) {
-                return $this->errorResponse('Unauthorized.', 403);
-            }
-
-            $this->adminService->delete($id);
-            return $this->deletedResponse();
-        } catch(\Exception $e){
-            return $this->handleException($e);
+        if (!Auth::guard('admin')->user()->hasPermissionTo('admin.delete')) {
+            return $this->errorResponse('Unauthorized.', 403);
         }
+
+        $this->adminService->delete($id);
+        return $this->deletedResponse();
     }
 
     public function assignRole(AssignRoleRequest $request, int $id)
     {
-        try{
-            // if (!Auth::guard('admin')->user()->hasPermissionTo('admin.assign_role')) {
+        // if (!Auth::guard('admin')->user()->hasPermissionTo('admin.assign_role')) {
 
-            //     return $this->errorResponse('Unauthorized.', 403);
-            // }
+        //     return $this->errorResponse('Unauthorized.', 403);
+        // }
 
-            $admin = $this->adminService->AssignRole($request->validated()['role_id'], $id);
+        $admin = $this->adminService->AssignRole($request->validated()['role_id'], $id);
 
-            // event(new RoleAssignedToAdmin($admin, $role));
-            return $this->successResponse($admin);
-        } catch (\Exception $e) {
-            return $this->handleException($e);   
-        }
+        // event(new RoleAssignedToAdmin($admin, $role));
+        return $this->successResponse($admin);
     }
 
     public function bulkDelete(BulkDeleteRequest $request)
     {
-        try{
-            if (!Auth::guard('admin')->user()->hasPermissionTo('admin.delete')) {
-                return $this->errorResponse('Unauthorized.', 403);
-            }
-
-            $this->adminService->bulkDelete($request->validated()['ids']);
-            return $this->deletedResponse('Admins deleted successfully');
-        } catch(\Exception $e){
-            return $this->handleException($e);
+        if (!Auth::guard('admin')->user()->hasPermissionTo('admin.delete')) {
+            return $this->errorResponse('Unauthorized.', 403);
         }
+
+        $this->adminService->bulkDelete($request->validated()['ids']);
+        return $this->deletedResponse('Admins deleted successfully');
     }
 }

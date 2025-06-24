@@ -18,28 +18,24 @@ class TicketReplyController extends Controller
 
     public function __construct(
         protected TicketReplyService $ticketReplyService,
-    ){}
+    ) {}
 
     public function store(StoreTicketReplyRequest $request): JsonResponse
     {
-        try{
-            $reply = $this->ticketReplyService->create($request->validated());
-            
-            // Get the ticket and admin for the event
-            $ticket = $reply->ticket;
-            $admin = $reply->admin;
-            
-            // Dispatch the event
-            event(new TicketReplied($ticket, $reply, $admin));
-            
-            return $this->successResponse(
-                TicketReplyResource::make($reply),
-                "Ticket Reply created successfully",
-                201
-            );
-        } catch(\Exception $e) {
-            return $this->errorResponse($e->getMessage(),500, []);
-        }
+        $reply = $this->ticketReplyService->create($request->validated());
+
+        // Get the ticket and admin for the event
+        $ticket = $reply->ticket;
+        $admin = $reply->admin;
+
+        // Dispatch the event
+        event(new TicketReplied($ticket, $reply, $admin));
+
+        return $this->successResponse(
+            TicketReplyResource::make($reply),
+            "Ticket Reply created successfully",
+            201
+        );
     }
 
     public function index(Request $request, int $ticketId): JsonResponse
@@ -54,43 +50,31 @@ class TicketReplyController extends Controller
 
     public function update(int $ticketId, int $id, UpdateTicketReplyRequest $request): JsonResponse
     {
-        try{
-            $reply = $this->ticketReplyService->update($id, $request->validated());
-            return $this->successResponse(
-                TicketReplyResource::make($reply),
-                "Ticket Reply updated successfully",
-                200
-            );
-        } catch (\Exception $e) {
-            return $this->errorResponse($e->getMessage(),500, []);
-        }
+        $reply = $this->ticketReplyService->update($id, $request->validated());
+        return $this->successResponse(
+            TicketReplyResource::make($reply),
+            "Ticket Reply updated successfully",
+            200
+        );
     }
 
     public function delete(int $ticketId, int $id): JsonResponse
     {
-        try {
-            $this->ticketReplyService->delete($id);
-            return $this->successResponse(
-                [],
-                "Ticket Reply deleted successfully",
-                200
-            );
-        } catch (\Exception $e) {
-            return $this->errorResponse($e->getMessage(),500, []);
-        }
+        $this->ticketReplyService->delete($id);
+        return $this->successResponse(
+            [],
+            "Ticket Reply deleted successfully",
+            200
+        );
     }
 
     public function show(int $ticketId, int $id): JsonResponse
     {
-        try {
-            $reply = $this->ticketReplyService->find($id);
-            return $this->successResponse(
-                TicketReplyResource::make($reply),
-                "Ticket Reply retrieved successfully",
-                200
-            );
-        } catch (\Exception $e) {
-            return $this->errorResponse($e->getMessage(),500, []);
-        }
+        $reply = $this->ticketReplyService->find($id);
+        return $this->successResponse(
+            TicketReplyResource::make($reply),
+            "Ticket Reply retrieved successfully",
+            200
+        );
     }
 }

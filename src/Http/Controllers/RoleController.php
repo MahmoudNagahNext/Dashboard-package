@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 namespace nextdev\nextdashboard\Http\Controllers;
 
 use Exception;
@@ -16,8 +17,8 @@ class RoleController extends Controller
 
     public function __construct(
         protected RoleService $service
-    ){}
-    
+    ) {}
+
     public function index()
     {
         // if (!auth()->guard('admin')->user()->hasPermissionTo('role.view')) {
@@ -30,19 +31,15 @@ class RoleController extends Controller
 
     public function store(RoleStoreRequest $request)
     {
-        try{
-            if (!auth()->guard('admin')->user()->hasPermissionTo('role.create')) {
-                return $this->errorResponse('Unauthorized.', 403);
-            }
-
-            $role = $this->service->store($request->validated());
-
-            return $this->createdResponse(
-                RoleResource::make($role)
-            );
-        } catch(\Exception $e) {
-            return $this->handleException($e);
+        if (!auth()->guard('admin')->user()->hasPermissionTo('role.create')) {
+            return $this->errorResponse('Unauthorized.', 403);
         }
+
+        $role = $this->service->store($request->validated());
+
+        return $this->createdResponse(
+            RoleResource::make($role)
+        );
     }
 
     public function show(int $id)
@@ -58,29 +55,23 @@ class RoleController extends Controller
 
     public function update(RoleUpdateRequest $request, int $id)
     {
-        try{
-            if (!auth()->guard('admin')->user()->hasPermissionTo('role.update')) {
-                return $this->errorResponse('Unauthorized.', 403);
-            }
 
-            $role = $this->service->update($id, $request->validated());
-            return $this->updatedResponse([], "Role Updated Successfully");
-        } catch (\Exception $e) {
-            return $this->handleException($e);
+        if (!auth()->guard('admin')->user()->hasPermissionTo('role.update')) {
+            return $this->errorResponse('Unauthorized.', 403);
         }
+
+        $role = $this->service->update($id, $request->validated());
+        return $this->updatedResponse([], "Role Updated Successfully");
     }
 
     public function destroy(int $id)
     {
-        try{
-            if (!auth()->guard('admin')->user()->hasPermissionTo('role.delete')) {
-                return $this->errorResponse('Unauthorized.', 403);
-            }
-            
-            $this->service->delete($id);
-            return $this->deletedResponse("Role Deleted Successfully");
-        } catch (\Exception $e) {
-            return $this->handleException($e);
+
+        if (!auth()->guard('admin')->user()->hasPermissionTo('role.delete')) {
+            return $this->errorResponse('Unauthorized.', 403);
         }
+
+        $this->service->delete($id);
+        return $this->deletedResponse("Role Deleted Successfully");
     }
 }
