@@ -101,10 +101,10 @@ class AdminController extends Controller
     public function assignRole(AssignRoleRequest $request, int $id)
     {
         try{
-            if (!Auth::guard('admin')->user()->hasPermissionTo('admin.assign_role')) {
+            // if (!Auth::guard('admin')->user()->hasPermissionTo('admin.assign_role')) {
 
-                return $this->errorResponse('Unauthorized.', 403);
-            }
+            //     return $this->errorResponse('Unauthorized.', 403);
+            // }
 
             $admin = $this->adminService->AssignRole($request->validated()['role_id'], $id);
 
