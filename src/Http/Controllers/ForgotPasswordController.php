@@ -17,11 +17,11 @@ class ForgotPasswordController extends Controller
     {
         $data = $request->validated();
 
-        $otp = rand(100000, 999999);
         $admin = Admin::where('email', $data['email'])->first();
         if (! $admin) {
             return response()->json(['message' => 'Email not found.'], 422);
         }
+        $otp = rand(100000, 999999);
 
         PasswordOtp::updateOrCreate(
             ['admin_id' => $admin->id],
@@ -31,7 +31,6 @@ class ForgotPasswordController extends Controller
             ]
         );
 
-        // TODO:: create mail class to send otp
         Mail::to($admin->email)->send(new SendOtpMail($otp, $admin));
 
         return response()->json(['message'=> "OTP Send successflly", "otp" => $otp]);
@@ -39,11 +38,14 @@ class ForgotPasswordController extends Controller
 
     public function resetPassword(ResetPasswordRequest $request)
     {
-        // TODO :: last otp for admin , expair for exist otp for same admin
         // TODO :: add cron job to delete expair otps
         $data = $request->validated();
+        $admin = Admin::where('email', $data['email'])->first();
+        if (! $admin) {
+            return response()->json(['message' => 'Email not found.'], 422);
+        }
 
-        $record = PasswordOtp::where('email', $data['email'])
+        $record = PasswordOtp::where('admin_id', $admin->id)
             ->where('otp', $data['otp'])
             ->where('expires_at', '>', now())
             ->first();
@@ -53,7 +55,7 @@ class ForgotPasswordController extends Controller
         }
 
         // تحديث الباسورد
-        Admin::where('email', $data['email'])->update([
+        $admin->update([
             'password' => Hash::make($data['password']),
         ]);
 
