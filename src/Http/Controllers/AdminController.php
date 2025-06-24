@@ -2,6 +2,7 @@
 
 namespace nextdev\nextdashboard\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use nextdev\nextdashboard\Traits\ApiResponseTrait;
 use nextdev\nextdashboard\Http\Requests\Admin\AdminStoreRequest;
@@ -16,7 +17,6 @@ class AdminController extends Controller
     // TODO:: Delete ApiResponseTrait use responce Facades
     use ApiResponseTrait;
 
-    // TODO:: use can in the constarctor to check permissions 
     public function __construct(
         protected AdminService $adminService
     ){
@@ -27,9 +27,16 @@ class AdminController extends Controller
         $this->middleware('can:admin.assign_role')->only('assignRole');
     }
 
-    public function index()
-    {   
-        $admins = $this->adminService->paginate();
+    public function index(Request $request)
+    {
+        $search = $request->get('search');
+        $with = ['roles'];
+        $perPage = $request->get('per_page', 10);
+        $page = $request->get('page', 1);
+        $sortBy = $request->get('sort_by', 'id');
+        $sortDirection = $request->get('sort_direction', 'desc');
+        
+        $admins = $this->adminService->paginate($search, $with, $perPage, $page, $sortBy, $sortDirection);
         return $this->paginatedCollectionResponse(
             $admins,
             'Admins Paginated',

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace nextdev\nextdashboard\Services;
 
@@ -7,29 +7,27 @@ use Spatie\Permission\Models\Role;
 
 class RoleService
 {
-    
+
     public function __construct(
         private Role $model,
-    ){}
+    ) {}
 
     public function index()
     {
-            $roles = $this->model::query()->with('permissions')->get();
-            return $roles;
-    } 
+        $roles = $this->model::query()->with('permissions')->get();
+        return $roles;
+    }
 
     public function store(array $data)
     {
-        return DB::transaction(function() use($data){
-            $role = $this->model::query()->create(['name' => $data['name']]);
+        $role = $this->model::query()->create(['name' => $data['name']]);
 
-            if (!empty($data['permissions'])) {
-                $role->permissions()->sync($data['permissions']);
-                // $role->syncPermissions($data['permissions']);
-            }
+        if (!empty($data['permissions'])) {
+            $role->permissions()->sync($data['permissions']);
+            // $role->syncPermissions($data['permissions']);
+        }
 
-            return $role->load('permissions');
-        });
+        return $role->load('permissions');
     }
 
     public function find(int $id)
@@ -39,18 +37,16 @@ class RoleService
 
     public function update(int $id, array $data)
     {
-        return DB::transaction(function() use($id, $data){
-            $role = $this->model::query()->findOrFail($id);
+        $role = $this->model::query()->findOrFail($id);
 
-            $role->update(['name' => $data['name']]);
+        $role->update(['name' => $data['name']]);
 
-            if (isset($data['permissions'])) {
-                 $role->permissions()->sync($data['permissions']);
-                // $role->syncPermissions($data['permissions']);
-            }
+        if (isset($data['permissions'])) {
+            $role->permissions()->sync($data['permissions']);
+            // $role->syncPermissions($data['permissions']);
+        }
 
-            return $role->load('permissions');
-        });
+        return $role->load('permissions');
     }
 
     public function delete(int $id)
@@ -60,5 +56,4 @@ class RoleService
 
         return $role->delete();
     }
-   
 }

@@ -2,9 +2,7 @@
 
 namespace nextdev\nextdashboard\Services;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use nextdev\nextdashboard\DTOs\AdminDTO;
 use nextdev\nextdashboard\Models\Admin;
 use Spatie\Permission\Models\Role;
 
@@ -16,14 +14,20 @@ class AdminService
     ){}
 
     // TODO:: add search and filters
-    public function paginate()
+    public function paginate($search = null, $with = [], $perPage = 10, $page = 1, $sortBy = 'id', $sortDirection = 'desc')
     {
-        return $this->model::query()->paginate(10);
+        $q = $this->model::query()->with($with);
+
+        if($search){
+            $q->where('name', 'like', "%{$search}%")
+            ->orWhere('email', 'like', "%{$search}%");
+        }
+        
+        return $q->paginate($perPage, $sortBy, $sortDirection, $page);
     }
  
     public function create(array $data)
     { 
-        //TODO:: remove transaction 
         return $this->model::create([
             'name'=> $data['name'],
             'email'=> $data['email'],
