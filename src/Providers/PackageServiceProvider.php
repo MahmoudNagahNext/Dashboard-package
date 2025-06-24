@@ -2,6 +2,7 @@
 
 namespace nextdev\nextdashboard\Providers;
 
+use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\ServiceProvider;
 use nextdev\nextdashboard\Console\ListEventsCommand;
 use nextdev\nextdashboard\Models\Admin;
@@ -10,12 +11,16 @@ use nextdev\nextdashboard\Observers\AdminObserver;
 use nextdev\nextdashboard\Observers\TicketObserver;
 use Illuminate\Support\Facades\Config;
 use nextdev\nextdashboard\Console\DeleteExpiredOtps;
+use nextdev\nextdashboard\Http\Middleware\HandleAuthorizationException;
 
 class PackageServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-
+        // Middleware
+        $kernel = $this->app->make(Kernel::class);
+        $kernel->pushMiddleware(HandleAuthorizationException::class);
+     
         Admin::observe(AdminObserver::class);
         Ticket::observe(TicketObserver::class);
 
