@@ -4,7 +4,7 @@ namespace nextdev\nextdashboard\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use nextdev\nextdashboard\Traits\ApiResponseTrait;
+use Illuminate\Support\Facades\Response;
 use nextdev\nextdashboard\Http\Requests\TicketCategory\BulkDeleteRequest;
 use nextdev\nextdashboard\Http\Requests\TicketCategory\TicketCategoryStoreRequest;
 use nextdev\nextdashboard\Http\Requests\TicketCategory\TicketCategoryUpdateRequest;
@@ -12,8 +12,6 @@ use nextdev\nextdashboard\Services\TicketCategoriesService;
 
 class TicketCategoriesController extends Controller
 {
-    use ApiResponseTrait;
-
     public function __construct(
         protected TicketCategoriesService $service
     ) {}
@@ -30,38 +28,60 @@ class TicketCategoriesController extends Controller
             $request->input('filters', [])
         );
 
-        return $this->paginatedResponse($items);
+        return Response::json([
+            'success' => true,
+            'message' => "Ticket Categories Fetched Successfully",
+            'data'    => $items
+        ],200);
     }
 
     public function store(TicketCategoryStoreRequest $request)
     {
         $item = $this->service->create($request->validated());
-        return $this->createdResponse($item);
+        return Response::json([
+            'success' => true,
+            'message' => "Ticket Category Created Successfully",
+            'data'    => $item
+        ],201);
     }
 
     public function show(int $id)
     {
-        return $this->successResponse($this->service->find($id));
+        return Response::json([
+            'success' => true,
+            'message' => "Ticket Category Fetched Successfully",
+            'data'    => $this->service->find($id)
+        ],200);
     }
 
     public function update(TicketCategoryUpdateRequest $request, int $id)
     {
 
         $this->service->update($request->validated(), $id);
-        return $this->updatedResponse();
+        return Response::json([
+            'success' => true,
+            'message' => "Ticket Category Updated Successfully",
+            'data'    => []
+        ],200);
     }
 
     public function destroy(int $id)
     {
         $this->service->delete($id);
-        return $this->deletedResponse();
+        return Response::json([
+            'success' => true,
+            'message' => "Ticket Category Deleted Successfully",
+            'data'    => []
+        ],200);
     }
 
     public function bulkDelete(BulkDeleteRequest $request)
     {
-        // $this->authorize('ticket.delete');
-
         $this->service->bulkDelete($request->validated()['ids']);
-        return $this->deletedResponse('Ticket Categories deleted successfully');
+        return Response::json([
+            'success' => true,
+            'message' => "Ticket Categories Deleted Successfully",
+            'data'    => []
+        ],200);
     }
 }
