@@ -4,9 +4,8 @@ namespace nextdev\nextdashboard\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use nextdev\nextdashboard\DTOs\TicketDTO;
+use Illuminate\Support\Facades\Response;
 use nextdev\nextdashboard\Http\Requests\Ticket\AddAttachmentsRequest;
-use nextdev\nextdashboard\Traits\ApiResponseTrait;
 use nextdev\nextdashboard\Http\Requests\Ticket\TicketStoreRequest;
 use nextdev\nextdashboard\Http\Requests\Ticket\TicketUpdateRequest;
 use nextdev\nextdashboard\Http\Resources\TicketResource;
@@ -16,8 +15,6 @@ use nextdev\nextdashboard\Http\Requests\Ticket\DeleteAttachmentsRequest;
 
 class TicketController extends Controller
 {
-    use ApiResponseTrait;
-
     public function __construct(
         protected TicketService $ticketService
     ) {
@@ -46,12 +43,17 @@ class TicketController extends Controller
 
         $tickets = $this->ticketService->paginate($search, $with, $perPage, $page, $sortBy, $sortDirection, $filters);
 
-        return $this->paginatedCollectionResponse(
-            $tickets,
-            'Tickets Paginated',
-            [],
-            TicketResource::class
-        );
+        return Response::json([
+            'success' => true,
+            'message' => "Tickets Paginated",
+            'data'    => TicketResource::collection($tickets),
+            'meta' => [
+                'current_page' => $tickets->currentPage(),
+                'last_page' => $tickets->lastPage(),
+                'total' => $tickets->total(),
+                'per_page' => $tickets->perPage(),
+            ]
+        ],200);
     }
 
 
@@ -63,49 +65,53 @@ class TicketController extends Controller
         $ticket = $this->ticketService->create($data);
 
         // event(new TicketCreated($ticket));
-        return $this->createdResponse(TicketResource::make($ticket));
+        return Response::json([
+            'success' => true,
+            'message' => "Ticket Created",
+            'data'    => TicketResource::make($ticket)
+        ],201);
     }
 
     public function show(int $id)
     {
         $ticket = $this->ticketService->find($id, ['creator', 'assignee', 'category', 'media']);
-        return $this->successResponse(TicketResource::make($ticket));
+        return Response::json([
+            'success' => true,
+            'message' => "Ticket Showed",
+            'data'    => TicketResource::make($ticket)
+        ],200);
     }
-
-    // public function update(TicketUpdateRequest $request, int $id)
-    // {
-    //     $data = $request->validated();
-    //     $data['attachments'] = $request->file('attachments', []);
-
-    //     $this->ticketService->update($data, $id);
-
-    //     // event(new TicketAssigned($ticket, $assignedAdmin));
-    //     return $this->updatedResponse();
-    // }
-
-    // TicketController.php
 
     public function update(TicketUpdateRequest $request, $id)
     {
-        $ticket = $this->ticketService->updateTicket($request->validated(), $id);
-        return response()->json([
+        $this->ticketService->updateTicket($request->validated(), $id);
+        // event(new TicketAssigned($ticket, $assignedAdmin));
+        return Response::json([
+            'success' => true,
             'message' => 'Ticket updated successfully',
+            'data'    => []
         ]);
     }
 
     public function addAttachments(AddAttachmentsRequest $request, $id)
     {
-        $media = $this->ticketService->addAttachments($id, $request->file('attachments'));
-        return response()->json([
+        $this->ticketService->addAttachments($id, $request->file('attachments'));
+        // event(new TicketAssigned($ticket, $assignedAdmin));
+        return Response::json([
+            'success' => true,
             'message' => 'Attachments added successfully',
+            'data'    => []
         ]);
     }
 
     public function deleteAttachments(DeleteAttachmentsRequest $request, $id)
     {
-        $media = $this->ticketService->deleteAttachments($id, $request->input('media_ids'));
-        return response()->json([
+        $this->ticketService->deleteAttachments($id, $request->input('media_ids'));
+        // event(new TicketAssigned($ticket, $assignedAdmin));
+        return Response::json([
+            'success' => true,
             'message' => 'Attachments deleted successfully',
+            'data' => []
         ]);
     }
 
@@ -113,12 +119,20 @@ class TicketController extends Controller
     public function destroy(int $id)
     {
         $this->ticketService->delete($id);
-        return $this->deletedResponse();
+        return Response::json([
+            'success' => true,
+            'message' => 'Ticket deleted successfully',
+            'data' => []
+        ]);
     }
 
     public function bulkDelete(BulkDeleteRequest $request)
     {
         $this->ticketService->bulkDelete($request->validated()['ids']);
-        return $this->deletedResponse('Tickets deleted successfully');
+        return Response::json([
+            'success' => true,
+            'message' => 'Tickets deleted successfully',
+            'data' => []
+        ]);
     }
 }
