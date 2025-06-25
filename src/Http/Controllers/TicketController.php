@@ -84,10 +84,9 @@ class TicketController extends Controller
 
     // TicketController.php
 
-    public function update(Request $request, $id)
+    public function update(TicketUpdateRequest $request, $id)
     {
-        $data = $request->except(['attachments']);
-        $ticket = $this->ticketService->updateTicket($data, $id);
+        $ticket = $this->ticketService->updateTicket($request->validated(), $id);
         return response()->json([
             'message' => 'Ticket updated successfully',
             'data' => new TicketResource($ticket)
@@ -96,9 +95,7 @@ class TicketController extends Controller
 
     public function addAttachments(Request $request, $id)
     {
-        $attachments = $request->file('attachments', []);
-        $media = $this->ticketService->addAttachments($id, $attachments);
-
+        $media = $this->ticketService->addAttachments($id, $request->file('attachments'));
         return response()->json([
             'message' => 'Attachments added successfully',
             'data' => $media
@@ -107,9 +104,7 @@ class TicketController extends Controller
 
     public function deleteAttachments(Request $request, $id)
     {
-        $mediaIds = $request->input('media_ids', []);
-        $media = $this->ticketService->deleteAttachments($id, $mediaIds);
-
+        $media = $this->ticketService->deleteAttachments($id, $request->input('media_ids'));
         return response()->json([
             'message' => 'Attachments deleted successfully',
             'data' => $media

@@ -34,8 +34,8 @@ class TicketUpdateRequest extends FormRequest
             'status'        => ['nullable', new Enum(TicketStatusEnum::class)],
             "category_id"   => "nullable|integer|exists:ticket_categories,id",
             "assignee_id"   => "nullable|integer|exists:admins,id",
-            'attachments'   => 'nullable|array',
-            'attachments.*' => 'file|mimes:jpg,jpeg,png,pdf,docx|max:5120',
+            // 'attachments'   => 'nullable|array',
+            // 'attachments.*' => 'file|mimes:jpg,jpeg,png,pdf,docx|max:5120',
         ];
     }
 }
