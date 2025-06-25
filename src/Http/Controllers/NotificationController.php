@@ -3,15 +3,12 @@
 namespace nextdev\nextdashboard\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
-use nextdev\nextdashboard\Traits\ApiResponseTrait;
+use Illuminate\Support\Facades\Response;
 
 class NotificationController extends Controller
 {
-    use ApiResponseTrait;
-
     /**
      * Get all notifications for the authenticated admin
      */
@@ -20,7 +17,11 @@ class NotificationController extends Controller
         $admin = Auth::guard('admin')->user();
         $notifications = $admin->notifications()->paginate(10);
         
-        return $this->successResponse($notifications);
+        return Response::json([
+            'success' => true,
+            'message' => "All Notification fetched successflly",
+            'data' => $notifications
+        ]);
     }
 
     /**
@@ -31,7 +32,11 @@ class NotificationController extends Controller
         $admin = Auth::guard('admin')->user();
         $notifications = $admin->unreadNotifications()->paginate(10);
         
-        return $this->successResponse($notifications);
+        return Response::json([
+            'success' => true,
+            'message' => "Unread Notification fetched successflly",
+            'data' => $notifications
+        ]);
     }
 
     /**
@@ -43,12 +48,20 @@ class NotificationController extends Controller
         $notification = $admin->notifications()->where('id', $id)->first();
         
         if (!$notification) {
-            return $this->errorResponse('Notification not found', 404);
+            return Response::json([
+                'success' => false,
+                'message' => 'Notification not found.',
+                'data' => []
+            ], 422);
         }
         
         $notification->markAsRead();
         
-        return $this->successResponse(null, 'Notification marked as read');
+        return Response::json([
+            'success' => true,
+            'message' => "Notification marked as read",
+            'data' => []
+        ]);
     }
 
     /**
@@ -59,7 +72,11 @@ class NotificationController extends Controller
         $admin = Auth::guard('admin')->user();
         $admin->unreadNotifications->markAsRead();
         
-        return $this->successResponse(null, 'All notifications marked as read');
+        return Response::json([
+            'success' => true,
+            'message' => "All notifications marked as read",
+            'data' => []
+        ]);
     }
 
     /**
@@ -71,11 +88,19 @@ class NotificationController extends Controller
         $notification = $admin->notifications()->where('id', $id)->first();
         
         if (!$notification) {
-            return $this->errorResponse('Notification not found', 404);
+            return Response::json([
+                'success' => false,
+                'message' => 'Notification not found.',
+                'data' => []
+            ], 422);
         }
         
         $notification->delete();
         
-        return $this->successResponse(null, 'Notification deleted');
+        return Response::json([
+            'success' => true,
+            'message' => "Notification deleted successflly",
+            'data' => []
+        ]);
     }
 }
