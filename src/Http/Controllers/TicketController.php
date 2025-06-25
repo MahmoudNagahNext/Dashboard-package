@@ -5,13 +5,14 @@ namespace nextdev\nextdashboard\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use nextdev\nextdashboard\DTOs\TicketDTO;
+use nextdev\nextdashboard\Http\Requests\Ticket\AddAttachmentsRequest;
 use nextdev\nextdashboard\Traits\ApiResponseTrait;
 use nextdev\nextdashboard\Http\Requests\Ticket\TicketStoreRequest;
 use nextdev\nextdashboard\Http\Requests\Ticket\TicketUpdateRequest;
 use nextdev\nextdashboard\Http\Resources\TicketResource;
 use nextdev\nextdashboard\Services\TicketService;
 use nextdev\nextdashboard\Http\Requests\Ticket\BulkDeleteRequest;
-
+use nextdev\nextdashboard\Http\Requests\Ticket\DeleteAttachmentsRequest;
 
 class TicketController extends Controller
 {
@@ -93,7 +94,7 @@ class TicketController extends Controller
         ]);
     }
 
-    public function addAttachments(Request $request, $id)
+    public function addAttachments(AddAttachmentsRequest $request, $id)
     {
         $media = $this->ticketService->addAttachments($id, $request->file('attachments'));
         return response()->json([
@@ -102,7 +103,7 @@ class TicketController extends Controller
         ]);
     }
 
-    public function deleteAttachments(Request $request, $id)
+    public function deleteAttachments(DeleteAttachmentsRequest $request, $id)
     {
         $media = $this->ticketService->deleteAttachments($id, $request->input('media_ids'));
         return response()->json([
