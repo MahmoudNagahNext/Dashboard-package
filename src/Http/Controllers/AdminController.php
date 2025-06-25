@@ -5,7 +5,6 @@ namespace nextdev\nextdashboard\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Response;
-use nextdev\nextdashboard\Traits\ApiResponseTrait;
 use nextdev\nextdashboard\Http\Requests\Admin\AdminStoreRequest;
 use nextdev\nextdashboard\Http\Requests\Admin\AdminUpdateRequest;
 use nextdev\nextdashboard\Http\Requests\Admin\AssignRoleRequest;
@@ -16,7 +15,6 @@ use nextdev\nextdashboard\Services\AdminService;
 class AdminController extends Controller
 {
     // TODO:: Delete ApiResponseTrait use responce Facades
-    use ApiResponseTrait;
 
     public function __construct(
         protected AdminService $adminService
@@ -49,12 +47,7 @@ class AdminController extends Controller
                 'per_page' => $admins->perPage(),
                 'total' => $admins->total(),
             ],
-        ]);
-        // return $this->paginatedCollectionResponse(
-        //     $admins,
-        //     'Admins Paginated',
-        //     [], 
-        //     AdminResource::class);    
+        ]);   
     }
 
     public function store(AdminStoreRequest $request)
@@ -67,10 +60,6 @@ class AdminController extends Controller
             'message' => 'Admin created successfully',
             'data' => AdminResource::make($admin),
         ],201);
-        // return $this->createdResponse(
-        //     AdminResource::make($admin),
-        //     'Admin created successfully'
-        // );
     }
 
     public function show(int $id)
@@ -78,12 +67,8 @@ class AdminController extends Controller
         return Response::json([
             'success' => true,
             'message' => 'Admin found successfully',
-            'data' => AdminResource::make($this->adminService->find($id)),
+            'data' => AdminResource::make($this->adminService->find($id,['roles'])),
         ]);
-        // return $this->successResponse(
-        //     AdminResource::make($this->adminService->find($id)),
-        //     'Admin found successfully'
-        // );
     }
 
     public function update(AdminUpdateRequest $request,int $id)
@@ -94,10 +79,6 @@ class AdminController extends Controller
             'message' => 'Admin updated successfully',
             'data' => [],
         ]);
-        // return $this->updatedResponse(
-        //     [],
-        //     'Admin updated successfully'
-        // );
     }
 
     public function destroy(int $id)
@@ -108,7 +89,6 @@ class AdminController extends Controller
             'message' => 'Admin deleted successfully',
             'data' => [],
         ]);
-        // return $this->deletedResponse('Admin deleted successfully');
     }
 
     public function assignRole(AssignRoleRequest $request, int $id)
@@ -121,10 +101,6 @@ class AdminController extends Controller
             'message' => 'Admin role assigned successfully',
             'data' => [],
         ]);
-        // return $this->successResponse(
-        //     AdminResource::make($admin),
-        //     'Admin role assigned successfully'
-        // );
     }
 
     public function bulkDelete(BulkDeleteRequest $request)
@@ -135,6 +111,5 @@ class AdminController extends Controller
             'message' => 'Admins deleted successfully',
             'data' => [],
         ]);
-        // return $this->deletedResponse('Admins deleted successfully');
     }
 }

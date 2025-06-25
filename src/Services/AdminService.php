@@ -36,9 +36,9 @@ class AdminService
         ]);
     }
 
-    public function find(int $id)
+    public function find(int $id, $with = [])
     {
-        return $this->model::query()->find($id);
+        return $this->model::query()->with($with)->find($id);
     }
  
     public function update(array $data, $id)
