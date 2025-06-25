@@ -36,8 +36,8 @@ class TicketController extends Controller
         $sortDirection = $request->get('sort_direction', 'desc');
 
         $filters = $request->only([
-            'status_id', 
-            'priority_id', 
+            'status', 
+            'priority', 
             'creator_id', 
             'assignee_id', 
             'category_id'
