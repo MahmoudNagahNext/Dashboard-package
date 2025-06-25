@@ -5,6 +5,7 @@ namespace nextdev\nextdashboard\Http\Controllers;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Response;
 use nextdev\nextdashboard\Http\Requests\Auth\ResetPasswordRequest;
 use nextdev\nextdashboard\Http\Requests\Auth\sendOtpRequest;
 use nextdev\nextdashboard\Mail\SendOtpMail;
@@ -19,7 +20,11 @@ class ForgotPasswordController extends Controller
 
         $admin = Admin::where('email', $data['email'])->first();
         if (! $admin) {
-            return response()->json(['message' => 'Email not found.'], 422);
+            return Response::json([
+                'success' => false,
+                'message' => 'Email not found.',
+                'data' => []
+            ], 422);
         }
         $otp = rand(100000, 999999);
 
@@ -33,7 +38,11 @@ class ForgotPasswordController extends Controller
 
         Mail::to($admin->email)->send(new SendOtpMail($otp, $admin));
 
-        return response()->json(['message'=> "OTP Send successflly", "otp" => $otp]);
+        return Response::json([
+            'success' => true,
+            'message'=> "OTP Send successflly",
+            'data' => []
+        ]);
     }
 
     public function resetPassword(ResetPasswordRequest $request)
@@ -41,7 +50,11 @@ class ForgotPasswordController extends Controller
         $data = $request->validated();
         $admin = Admin::where('email', $data['email'])->first();
         if (! $admin) {
-            return response()->json(['message' => 'Email not found.'], 422);
+            return Response::json([
+                'success' => false,
+                'message' => 'Email not found.',
+                'data' => []
+            ], 422);
         }
 
         $record = PasswordOtp::where('admin_id', $admin->id)
@@ -50,7 +63,11 @@ class ForgotPasswordController extends Controller
             ->first();
 
         if (! $record) {
-            return response()->json(['message' => 'OTP is invalid or expired.'], 422);
+            return Response::json([
+                'success' => false,
+                'message' => 'OTP is invalid or expired.',
+                'data' => []
+            ], 422);
         }
 
         $admin->update([
@@ -59,6 +76,10 @@ class ForgotPasswordController extends Controller
 
         $record->delete();
 
-        return response()->json(['message' => "Password Updated Successflly"]);
+        return Response::json([
+            'success' => true,
+            'message' => "Password Updated Successflly",
+            'data' => []
+        ]);
     }
 }
