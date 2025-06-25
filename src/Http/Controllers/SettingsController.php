@@ -14,29 +14,36 @@ class SettingsController extends Controller
 
     public function ticketStatuses(Request $request)
     {
+        // Set the language from the request
+        app()->setLocale($request->get('lang', app()->getLocale()));
+
         $items = TicketStatusEnum::cases();
 
         $result = collect($items)->map(function ($item) {
             return [
-                'name'   => $item->value,    // "open", "closed", etc.
-                'lable' => $item->label(),  // e.g., "Open"
+                'id'   => $item->value,
+                'name' => $item->label(),
             ];
         });
 
         return $this->successResponse($result);
     }
 
+
     public function ticketPriorities(Request $request)
     {
+        app()->setLocale($request->get('lang', app()->getLocale()));
+
         $items = TicketPriorityEnum::cases();
 
         $result = collect($items)->map(function ($item) {
             return [
-                'name'   => $item->value,    // "low", "medium", etc.
-                'lable' => $item->label(),  // e.g., "Low"
+                'id'   => $item->value,
+                'name' => $item->label(),
             ];
         });
 
         return $this->successResponse($result);
     }
+
 }
