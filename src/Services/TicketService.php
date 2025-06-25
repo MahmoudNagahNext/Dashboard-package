@@ -59,22 +59,55 @@ class TicketService
         return $this->model::query()->with($with)->find($id);
     }
 
-    public function update(array $data, $id)
+    // public function update(array $data, $id)
+    // {
+    //     $ticket = $this->model->find($id);
+    //     $attachments = $data['attachments'] ?? null;
+    //     $ticket->update($data);
+
+    //     // TODO:: 2 endpoint (add media , delete media)
+    //     if (!empty($attachments)) {
+    //         $ticket->clearMediaCollection('attachments');
+
+    //         foreach ($attachments as $file) {
+    //             $ticket->addMedia($file)->toMediaCollection('attachments');
+    //         }
+    //     }
+    //     return $ticket;
+    // }
+
+    public function updateTicket(array $data, $id)
     {
-        $ticket = $this->model->find($id);
-        $attachments = $data['attachments'] ?? null;
+        $ticket = $this->model->findOrFail($id);
         $ticket->update($data);
+        return $ticket; 
+    }
 
-        // TODO:: 2 endpoint (add media , delete media)
-        if (!empty($attachments)) {
-            $ticket->clearMediaCollection('attachments');
+    public function addAttachments($id, array $attachments)
+    {
+        $ticket = $this->model->findOrFail($id);
 
-            foreach ($attachments as $file) {
-                $ticket->addMedia($file)->toMediaCollection('attachments');
+        foreach ($attachments as $file) {
+            $ticket->addMedia($file)->toMediaCollection('attachments');
+        }
+
+        return $ticket->getMedia('attachments');
+    }
+
+    public function deleteAttachments($id, array $mediaIds)
+    {
+        $ticket = $this->model->findOrFail($id);
+
+        foreach ($mediaIds as $mediaId) {
+            $media = $ticket->media()->where('id', $mediaId)->first();
+            if ($media) {
+                $media->delete();
             }
         }
-        return $ticket;
+
+        return $ticket->getMedia('attachments');
     }
+
 
     public function delete(int $id)
     {

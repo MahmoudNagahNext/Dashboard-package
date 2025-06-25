@@ -71,16 +71,51 @@ class TicketController extends Controller
         return $this->successResponse(TicketResource::make($ticket));
     }
 
-    public function update(TicketUpdateRequest $request, int $id)
+    // public function update(TicketUpdateRequest $request, int $id)
+    // {
+    //     $data = $request->validated();
+    //     $data['attachments'] = $request->file('attachments', []);
+
+    //     $this->ticketService->update($data, $id);
+
+    //     // event(new TicketAssigned($ticket, $assignedAdmin));
+    //     return $this->updatedResponse();
+    // }
+
+    // TicketController.php
+
+    public function update(Request $request, $id)
     {
-        $data = $request->validated();
-        $data['attachments'] = $request->file('attachments', []);
-
-        $this->ticketService->update($data, $id);
-
-        // event(new TicketAssigned($ticket, $assignedAdmin));
-        return $this->updatedResponse();
+        $data = $request->except(['attachments']);
+        $ticket = $this->ticketService->updateTicket($data, $id);
+        return response()->json([
+            'message' => 'Ticket updated successfully',
+            'data' => new TicketResource($ticket)
+        ]);
     }
+
+    public function addAttachments(Request $request, $id)
+    {
+        $attachments = $request->file('attachments', []);
+        $media = $this->ticketService->addAttachments($id, $attachments);
+
+        return response()->json([
+            'message' => 'Attachments added successfully',
+            'data' => $media
+        ]);
+    }
+
+    public function deleteAttachments(Request $request, $id)
+    {
+        $mediaIds = $request->input('media_ids', []);
+        $media = $this->ticketService->deleteAttachments($id, $mediaIds);
+
+        return response()->json([
+            'message' => 'Attachments deleted successfully',
+            'data' => $media
+        ]);
+    }
+
 
     public function destroy(int $id)
     {

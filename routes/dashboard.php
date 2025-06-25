@@ -47,14 +47,15 @@ Route::prefix("dashboard")
             // Ticket Categories resource
             Route::apiResource('categories', TicketCategoriesController::class);
             Route::post("/categories/bulk-delete", [TicketCategoriesController::class, 'bulkDelete']);
-    
-            // TODO:: add Enum for them , create apis for these 
+     
             Route::get('statuses', [SettingsController::class, 'ticketStatuses']);
             Route::get('priorities', [SettingsController::class, 'ticketPriorities']);
         
              // Tickets resource
-             Route::apiResource('', TicketController::class)->parameters(['' => 'ticket']);
-             Route::post("/bulk-delete", [TicketController::class, 'bulkDelete']);
+            Route::apiResource('', TicketController::class)->parameters(['' => 'ticket']);
+            Route::post('{id}/attachments', [TicketController::class, 'addAttachments']);
+            Route::delete('{id}/attachments', [TicketController::class, 'deleteAttachments']);
+            Route::post("/bulk-delete", [TicketController::class, 'bulkDelete']);
         
             // Ticket replies routes
             Route::prefix("{ticket}/replies")->group(function () {
