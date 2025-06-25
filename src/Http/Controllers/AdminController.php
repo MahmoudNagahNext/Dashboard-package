@@ -2,6 +2,7 @@
 
 namespace nextdev\nextdashboard\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Response;
@@ -14,8 +15,6 @@ use nextdev\nextdashboard\Services\AdminService;
 
 class AdminController extends Controller
 {
-    // TODO:: Delete ApiResponseTrait use responce Facades
-
     public function __construct(
         protected AdminService $adminService
     ){
@@ -26,7 +25,7 @@ class AdminController extends Controller
         $this->middleware('can:admin.assign_role')->only('assignRole');
     }
 
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         $search = $request->get('search');
         $with = ['roles'];
@@ -50,7 +49,7 @@ class AdminController extends Controller
         ]);   
     }
 
-    public function store(AdminStoreRequest $request)
+    public function store(AdminStoreRequest $request): JsonResponse
     {
         $admin = $this->adminService->create($request->validated());
         // event(new AdminCreated($admin));
@@ -62,7 +61,7 @@ class AdminController extends Controller
         ],201);
     }
 
-    public function show(int $id)
+    public function show(int $id): JsonResponse
     {
         return Response::json([
             'success' => true,
@@ -71,7 +70,7 @@ class AdminController extends Controller
         ]);
     }
 
-    public function update(AdminUpdateRequest $request,int $id)
+    public function update(AdminUpdateRequest $request,int $id): JsonResponse
     {
         $this->adminService->update($request->validated(), $id);
         return Response::json([
@@ -81,7 +80,7 @@ class AdminController extends Controller
         ]);
     }
 
-    public function destroy(int $id)
+    public function destroy(int $id): JsonResponse
     {
         $this->adminService->delete($id);
         return Response::json([
@@ -91,7 +90,7 @@ class AdminController extends Controller
         ]);
     }
 
-    public function assignRole(AssignRoleRequest $request, int $id)
+    public function assignRole(AssignRoleRequest $request, int $id): JsonResponse
     {
         $admin = $this->adminService->AssignRole($request->validated()['role_id'], $id);
         // event(new RoleAssignedToAdmin($admin, $role));
@@ -103,7 +102,7 @@ class AdminController extends Controller
         ]);
     }
 
-    public function bulkDelete(BulkDeleteRequest $request)
+    public function bulkDelete(BulkDeleteRequest $request): JsonResponse
     {
         $this->adminService->bulkDelete($request->validated()['ids']);
         return Response::json([

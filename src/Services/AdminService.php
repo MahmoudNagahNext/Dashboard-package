@@ -2,6 +2,7 @@
 
 namespace nextdev\nextdashboard\Services;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Hash;
 use nextdev\nextdashboard\Models\Admin;
 use Spatie\Permission\Models\Role;
@@ -13,7 +14,7 @@ class AdminService
         private Admin $model,
     ){}
 
-    public function paginate($search = null, $with = [], $perPage = 10, $page = 1, $sortBy = 'id', $sortDirection = 'desc')
+    public function paginate($search = null, $with = [], $perPage = 10, $page = 1, $sortBy = 'id', $sortDirection = 'desc'): LengthAwarePaginator
     {
         $q = $this->model::query()->with($with);
 
@@ -27,7 +28,7 @@ class AdminService
         return $q->paginate($perPage, ['*'], 'page',$page);
     }
  
-    public function create(array $data)
+    public function create(array $data): Admin
     { 
         return $this->model::create([
             'name'=> $data['name'],
@@ -36,22 +37,22 @@ class AdminService
         ]);
     }
 
-    public function find(int $id, $with = [])
+    public function find(int $id, $with = []): Admin
     {
         return $this->model::query()->with($with)->find($id);
     }
  
-    public function update(array $data, $id)
+    public function update(array $data, $id): bool
     {
         return $this->model::query()->find($id)->update($data);
     }
  
-    public function delete(int $id)
+    public function delete(int $id): bool
     {
         return  $this->model::query()->find($id)->delete();
     }
 
-    public function AssignRole(int $roleId, int $adminId)
+    public function AssignRole(int $roleId, int $adminId): Admin
     {
         $admin = $this->model::findOrFail($adminId);
         $role = Role::findOrFail($roleId);
@@ -61,7 +62,7 @@ class AdminService
         return $admin->load('roles');
     }
 
-    public function bulkDelete(array $ids)
+    public function bulkDelete(array $ids): bool
     {
         return $this->model::query()->whereIn('id', $ids)->delete();
     }
