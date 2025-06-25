@@ -2,20 +2,17 @@
 
 namespace nextdev\nextdashboard\Http\Controllers;
 
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Response;
 use nextdev\nextdashboard\Http\Requests\Role\RoleStoreRequest;
 use nextdev\nextdashboard\Http\Requests\Role\RoleUpdateRequest;
 use nextdev\nextdashboard\Http\Resources\RoleResource;
 use nextdev\nextdashboard\Services\RoleService;
-use nextdev\nextdashboard\Traits\ApiResponseTrait;
 
 
 class RoleController extends Controller
 {
-    use ApiResponseTrait;
-
     public function __construct(
         protected RoleService $service
     ) {
@@ -36,12 +33,17 @@ class RoleController extends Controller
 
         $roles = $this->service->paginate($search, $with, $perPage, $page, $sortBy, $sortDirection);
 
-        return $this->paginatedCollectionResponse(
-            $roles,
-            'Roles Paginated',
-            [],
-            RoleResource::class
-        );
+        return Response::json([
+            'success' => true,
+            'message' => "Roles Pagination",
+            'data' => RoleResource::collection($roles),
+            'meta' => [
+                'current_page' => $roles->currentPage(),
+                'last_page' => $roles->lastPage(),
+                'total' => $roles->total(),
+                'per_page' => $roles->perPage(),
+            ]
+        ]);
     }
 
 
@@ -49,27 +51,39 @@ class RoleController extends Controller
     {
         $role = $this->service->store($request->validated());
 
-        return $this->createdResponse(
-            RoleResource::make($role)
-        );
+        return Response::json([
+            'success' => true,
+            'message' => "Role Created Successfully",
+            'data' => RoleResource::make($role)
+        ],201);
     }
 
     public function show(int $id)
     {
-        return $this->successResponse(
-            RoleResource::make($this->service->find($id))
-        );
+        return Response::json([
+            'success' => true,
+            'message' => "Role Fetched Successfully",
+            'data' => RoleResource::make($this->service->find($id,['permissions']))
+        ]);
     }
 
     public function update(RoleUpdateRequest $request, int $id)
     {
         $role = $this->service->update($id, $request->validated());
-        return $this->updatedResponse([], "Role Updated Successfully");
+        return Response::json([
+            'success' => true,
+            'message' => "Role Updated Successfully",
+            'data' => []
+        ],200);
     }
 
     public function destroy(int $id)
     {
         $this->service->delete($id);
-        return $this->deletedResponse("Role Deleted Successfully");
+        return Response::json([
+            'success' => true,
+            'message' => "Role Deleted Successfully",
+            'data'    => []
+        ],200);
     }
 }

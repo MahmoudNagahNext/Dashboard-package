@@ -38,9 +38,9 @@ class RoleService
         return $role->load('permissions');
     }
 
-    public function find(int $id)
+    public function find(int $id, $with = [])
     {
-        return  $this->model::query()->with('permissions')->findOrFail($id);
+        return  $this->model::query()->with($with)->findOrFail($id);
     }
 
     public function update(int $id, array $data)
