@@ -35,7 +35,7 @@ class PackageServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'nextdashboard');
 
         // Load Translations
-        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'nextdashboard');
+        $this->loadTranslationsFrom(__DIR__ . '/../../resources/lang', 'nextdashboard');
 
         // Publish config
         $this->publishes([
