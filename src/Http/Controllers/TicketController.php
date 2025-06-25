@@ -29,7 +29,7 @@ class TicketController extends Controller
     public function index(Request $request)
     {
         $search = $request->get('search');
-        $with = ['creator', 'assignee', 'status', 'priority', 'category', 'media'];
+        $with = ['creator', 'assignee', 'category', 'media'];
         $perPage = $request->get('per_page', 10);
         $page = $request->get('page', 1);
         $sortBy = $request->get('sort_by', 'id');
