@@ -4,14 +4,12 @@ namespace nextdev\nextdashboard\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Response;
 use nextdev\nextdashboard\Enums\TicketPriorityEnum;
 use nextdev\nextdashboard\Enums\TicketStatusEnum;
-use nextdev\nextdashboard\Traits\ApiResponseTrait;
 
 class SettingsController extends Controller
 {
-    use ApiResponseTrait;
-
     public function ticketStatuses(Request $request)
     {
         // Set the language from the request
@@ -26,7 +24,11 @@ class SettingsController extends Controller
             ];
         });
 
-        return $this->successResponse($result);
+        return Response::json([
+            'success' => true,
+            'message' => "Ticket Statuses",
+            'data'    => $result
+        ],200);
     }
 
 
@@ -43,7 +45,11 @@ class SettingsController extends Controller
             ];
         });
 
-        return $this->successResponse($result);
+        return Response::json([
+            'success' => true,
+            'message' => "Ticket Priorities",
+            'data'    => $result
+        ],200);
     }
 
 }
