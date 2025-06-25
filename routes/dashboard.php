@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use nextdev\nextdashboard\Http\Controllers\AdminController;
 use nextdev\nextdashboard\Http\Controllers\AuthController;
-use nextdev\nextdashboard\Http\Controllers\DropDownsController;
+use nextdev\nextdashboard\Http\Controllers\SettingsController;
 use nextdev\nextdashboard\Http\Controllers\ForgotPasswordController;
 use nextdev\nextdashboard\Http\Controllers\PermissionController;
 use nextdev\nextdashboard\Http\Controllers\RoleController;
@@ -48,9 +48,9 @@ Route::prefix("dashboard")
             Route::apiResource('categories', TicketCategoriesController::class);
             Route::post("/categories/bulk-delete", [TicketCategoriesController::class, 'bulkDelete']);
     
-            // TODO:: add Enum for them 
-            Route::get('statuses', [DropDownsController::class, 'ticketStatuses']);
-            Route::get('priorities', [DropDownsController::class, 'ticketPriorities']);
+            // TODO:: add Enum for them , create apis for these 
+            Route::get('statuses', [SettingsController::class, 'ticketStatuses']);
+            Route::get('priorities', [SettingsController::class, 'ticketPriorities']);
         
              // Tickets resource
              Route::apiResource('', TicketController::class)->parameters(['' => 'ticket']);

@@ -14,12 +14,6 @@ enum TicketStatusEnum: string
 
     public function label(): string
     {
-        return match($this) {
-            self::OPEN => 'Open',
-            self::IN_PROGRESS => 'In Progress',
-            self::RESOLVED => 'Resolved',
-            self::CLOSED => 'Closed',
-            self::REJECTED => 'Rejected',
-        };
+        return __('dashboard.status.' . $this->value);
     }
 }
