@@ -37,9 +37,8 @@ class TicketService
     }
 
 
-    public function create(TicketDTO $dto)
+    public function create(array $data)
     {
-        $data = (array) $dto;
         $attachments = $data['attachments'] ?? null;
 
         $data['creator_id'] = Auth::user()->id;

@@ -14,13 +14,18 @@ class Ticket extends Model implements HasMedia
     protected $fillable = [
         'title',
         'description',
-        'status_id',
-        'priority_id',
+        'status',
+        'priority',
         'category_id',
         'creator_type',
         'creator_id',
         'assignee_type',
         'assignee_id'
+    ];
+
+    protected $casts = [
+        'status'   => TicketStatus::class,
+        'priority' => TicketPriority::class,
     ];
 
 
@@ -37,16 +42,6 @@ class Ticket extends Model implements HasMedia
     public function category()
     {
         return $this->belongsTo(TicketCategory::class);
-    }
-
-    public function status()
-    {
-        return $this->belongsTo(TicketStatus::class);
-    }
-
-    public function priority()
-    {
-        return $this->belongsTo(TicketPriority::class);
     }
     
     public function replies()

@@ -59,8 +59,7 @@ class TicketController extends Controller
         $data = $request->validated();
         $data['attachments'] = $request->file('attachments', []);
 
-        $dto = TicketDTO::fromRequest($data);
-        $ticket = $this->ticketService->create($dto);
+        $ticket = $this->ticketService->create($data);
 
         // event(new TicketCreated($ticket));
         return $this->createdResponse(TicketResource::make($ticket));
