@@ -2,6 +2,7 @@
 
 namespace nextdev\nextdashboard\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Response;
@@ -16,7 +17,7 @@ class TicketCategoriesController extends Controller
         protected TicketCategoriesService $service
     ) {}
 
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         $items = $this->service->paginate(
             $request->input('search'),
@@ -35,7 +36,7 @@ class TicketCategoriesController extends Controller
         ],200);
     }
 
-    public function store(TicketCategoryStoreRequest $request)
+    public function store(TicketCategoryStoreRequest $request): JsonResponse
     {
         $item = $this->service->create($request->validated());
         return Response::json([
@@ -45,7 +46,7 @@ class TicketCategoriesController extends Controller
         ],201);
     }
 
-    public function show(int $id)
+    public function show(int $id): JsonResponse
     {
         return Response::json([
             'success' => true,
@@ -54,7 +55,7 @@ class TicketCategoriesController extends Controller
         ],200);
     }
 
-    public function update(TicketCategoryUpdateRequest $request, int $id)
+    public function update(TicketCategoryUpdateRequest $request, int $id): JsonResponse
     {
 
         $this->service->update($request->validated(), $id);
@@ -65,7 +66,7 @@ class TicketCategoriesController extends Controller
         ],200);
     }
 
-    public function destroy(int $id)
+    public function destroy(int $id): JsonResponse
     {
         $this->service->delete($id);
         return Response::json([
@@ -75,7 +76,7 @@ class TicketCategoriesController extends Controller
         ],200);
     }
 
-    public function bulkDelete(BulkDeleteRequest $request)
+    public function bulkDelete(BulkDeleteRequest $request): JsonResponse
     {
         $this->service->bulkDelete($request->validated()['ids']);
         return Response::json([

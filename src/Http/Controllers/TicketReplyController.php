@@ -6,7 +6,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Response;
-use nextdev\nextdashboard\Events\TicketReplied;
 use nextdev\nextdashboard\Http\Requests\TicketReply\StoreTicketReplyRequest;
 use nextdev\nextdashboard\Http\Requests\TicketReply\UpdateTicketReplyRequest;
 use nextdev\nextdashboard\Http\Resources\TicketReplyResource;

@@ -2,6 +2,7 @@
 
 namespace nextdev\nextdashboard\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Response;
@@ -24,7 +25,7 @@ class TicketController extends Controller
         $this->middleware('can:ticket.delete')->only('destroy');
     }
 
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         $search = $request->get('search');
         $with = ['creator', 'assignee', 'category', 'media'];
@@ -57,7 +58,7 @@ class TicketController extends Controller
     }
 
 
-    public function store(TicketStoreRequest $request)
+    public function store(TicketStoreRequest $request): JsonResponse
     {
         $data = $request->validated();
         $data['attachments'] = $request->file('attachments', []);
@@ -72,7 +73,7 @@ class TicketController extends Controller
         ],201);
     }
 
-    public function show(int $id)
+    public function show(int $id): JsonResponse
     {
         $ticket = $this->ticketService->find($id, ['creator', 'assignee', 'category', 'media']);
         return Response::json([
@@ -82,7 +83,7 @@ class TicketController extends Controller
         ],200);
     }
 
-    public function update(TicketUpdateRequest $request, $id)
+    public function update(TicketUpdateRequest $request, $id): JsonResponse
     {
         $this->ticketService->updateTicket($request->validated(), $id);
         // event(new TicketAssigned($ticket, $assignedAdmin));
@@ -93,7 +94,7 @@ class TicketController extends Controller
         ]);
     }
 
-    public function addAttachments(AddAttachmentsRequest $request, $id)
+    public function addAttachments(AddAttachmentsRequest $request, $id): JsonResponse
     {
         $this->ticketService->addAttachments($id, $request->file('attachments'));
         // event(new TicketAssigned($ticket, $assignedAdmin));
@@ -104,7 +105,7 @@ class TicketController extends Controller
         ]);
     }
 
-    public function deleteAttachments(DeleteAttachmentsRequest $request, $id)
+    public function deleteAttachments(DeleteAttachmentsRequest $request, $id): JsonResponse
     {
         $this->ticketService->deleteAttachments($id, $request->input('media_ids'));
         // event(new TicketAssigned($ticket, $assignedAdmin));
@@ -116,7 +117,7 @@ class TicketController extends Controller
     }
 
 
-    public function destroy(int $id)
+    public function destroy(int $id): JsonResponse
     {
         $this->ticketService->delete($id);
         return Response::json([
@@ -126,7 +127,7 @@ class TicketController extends Controller
         ]);
     }
 
-    public function bulkDelete(BulkDeleteRequest $request)
+    public function bulkDelete(BulkDeleteRequest $request): JsonResponse
     {
         $this->ticketService->bulkDelete($request->validated()['ids']);
         return Response::json([

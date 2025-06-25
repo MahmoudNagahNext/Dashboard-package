@@ -2,6 +2,7 @@
 
 namespace nextdev\nextdashboard\Services;
 
+use Illuminate\Database\Eloquent\Collection;
 use nextdev\nextdashboard\Http\Resources\PermissionResource;
 use Spatie\Permission\Models\Permission;
 
@@ -14,7 +15,7 @@ class PermissionService
 
     
 
-    public function groupedPermissions()
+    public function groupedPermissions(): Collection
     {
         $permissions = $this->model::all();
 

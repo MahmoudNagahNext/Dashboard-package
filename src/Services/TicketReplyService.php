@@ -2,6 +2,7 @@
 
 namespace nextdev\nextdashboard\Services;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use nextdev\nextdashboard\Models\TicketReply;
@@ -12,7 +13,7 @@ class TicketReplyService
         protected TicketReply $model,
     ) {}
 
-    public function index(int $ticketId)
+    public function index(int $ticketId): Collection
     {
         return $this->model->where('ticket_id', $ticketId)
             ->with(['admin', 'media'])
@@ -20,12 +21,12 @@ class TicketReplyService
             ->get();
     }
 
-    public function find(int $id)
+    public function find(int $id): TicketReply
     {
         return $this->model->with(['admin', 'media'])->findOrFail($id);
     }
 
-    public function create(array $data)
+    public function create(array $data): TicketReply
     {
         $data['admin_id'] = Auth::id();
         $attachments = $data['attachments'] ?? null;
@@ -41,7 +42,7 @@ class TicketReplyService
         return $reply->load(['admin', 'media']);
     }
 
-    public function update(int $id, array $data)
+    public function update(int $id, array $data):bool|null
     {
         $reply = $this->model->findOrFail($id);
         $attachments = $data['attachments'] ?? null;
@@ -60,7 +61,7 @@ class TicketReplyService
         return $reply->load(['admin', 'media']);
     }
 
-    public function delete(int $id)
+    public function delete(int $id): bool|null
     {
         $reply = $this->model->findOrFail($id);
         $reply->clearMediaCollection('attachments');

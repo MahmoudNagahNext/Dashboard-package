@@ -2,6 +2,7 @@
 
 namespace nextdev\nextdashboard\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -14,7 +15,7 @@ use nextdev\nextdashboard\Models\PasswordOtp;
 
 class ForgotPasswordController extends Controller
 {
-    public function sendOtp(sendOtpRequest $request)
+    public function sendOtp(sendOtpRequest $request): JsonResponse
     {
         $data = $request->validated();
 
@@ -45,7 +46,7 @@ class ForgotPasswordController extends Controller
         ]);
     }
 
-    public function resetPassword(ResetPasswordRequest $request)
+    public function resetPassword(ResetPasswordRequest $request): JsonResponse
     {
         $data = $request->validated();
         $admin = Admin::where('email', $data['email'])->first();

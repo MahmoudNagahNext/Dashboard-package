@@ -2,9 +2,8 @@
 
 namespace nextdev\nextdashboard\Services;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use nextdev\nextdashboard\DTOs\TicketDTO;
 use nextdev\nextdashboard\Models\Admin;
 use nextdev\nextdashboard\Models\Ticket;
 
@@ -15,7 +14,7 @@ class TicketService
         protected Ticket $model,
     ) {}
 
-    public function paginate($search = null, $with = [], $perPage = 10, $page = 1, $sortBy = 'id', $sortDirection = 'desc', $filters = [])
+    public function paginate($search = null, $with = [], $perPage = 10, $page = 1, $sortBy = 'id', $sortDirection = 'desc', $filters = []): LengthAwarePaginator
     {
         $q = $this->model::query()->with($with);
 
@@ -36,8 +35,7 @@ class TicketService
         return $q->paginate($perPage, ['*'], 'page', $page);
     }
 
-
-    public function create(array $data)
+    public function create(array $data): Ticket
     {
         $attachments = $data['attachments'] ?? null;
 
@@ -54,19 +52,19 @@ class TicketService
         return $ticket;
     }
 
-    public function find(int $id, array $with = [])
+    public function find(int $id, array $with = []): Ticket
     {
-        return $this->model::query()->with($with)->find($id);
+        return $this->model::query()->with($with)->findOrFail($id);
     }
 
-    public function updateTicket(array $data, $id)
+    public function updateTicket(array $data, $id): bool|null
     {
         $ticket = $this->model->findOrFail($id);
         $ticket->update($data);
         return $ticket; 
     }
 
-    public function addAttachments($id, array $attachments)
+    public function addAttachments($id, array $attachments):Ticket
     {
         $ticket = $this->model->findOrFail($id);
 
@@ -77,7 +75,7 @@ class TicketService
         return $ticket->getMedia('attachments');
     }
 
-    public function deleteAttachments($id, array $mediaIds)
+    public function deleteAttachments($id, array $mediaIds):Ticket
     {
         $ticket = $this->model->findOrFail($id);
 
@@ -92,14 +90,14 @@ class TicketService
     }
 
 
-    public function delete(int $id)
+    public function delete(int $id): bool|null
     {
         $ticket = $this->model::query()->find($id);
         $ticket->clearMediaCollection('attachments');
         return $ticket->delete();
     }
 
-    public function bulkDelete(array $ids)
+    public function bulkDelete(array $ids): bool|null
     {
         return $this->model::query()->whereIn('id', $ids)->delete();
     }

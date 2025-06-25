@@ -2,6 +2,7 @@
 
 namespace nextdev\nextdashboard\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Response;
@@ -22,7 +23,7 @@ class RoleController extends Controller
         $this->middleware('can:role.delete')->only('destroy');
     }
 
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         $search = $request->get('search');
         $with = ['permissions'];
@@ -47,7 +48,7 @@ class RoleController extends Controller
     }
 
 
-    public function store(RoleStoreRequest $request)
+    public function store(RoleStoreRequest $request): JsonResponse
     {
         $role = $this->service->store($request->validated());
 
@@ -58,7 +59,7 @@ class RoleController extends Controller
         ],201);
     }
 
-    public function show(int $id)
+    public function show(int $id): JsonResponse
     {
         return Response::json([
             'success' => true,
@@ -67,7 +68,8 @@ class RoleController extends Controller
         ]);
     }
 
-    public function update(RoleUpdateRequest $request, int $id)
+    public function update(RoleUpdateRequest $request, int $id): JsonResponse
+
     {
         $role = $this->service->update($id, $request->validated());
         return Response::json([
@@ -77,7 +79,7 @@ class RoleController extends Controller
         ],200);
     }
 
-    public function destroy(int $id)
+    public function destroy(int $id): JsonResponse
     {
         $this->service->delete($id);
         return Response::json([
