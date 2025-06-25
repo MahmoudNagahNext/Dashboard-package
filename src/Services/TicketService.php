@@ -59,30 +59,17 @@ class TicketService
         return $this->model::query()->with($with)->find($id);
     }
 
-    public function update(TicketDTO $dto, $id)
+    public function update(array $data, $id)
     {
         $ticket = $this->model->find($id);
-
-        $data = [
-            'title' => $dto->title,
-            'description' => $dto->description,
-            'status_id' => $dto->status_id,
-            'priority_id' => $dto->priority_id,
-            'category_id' => $dto->category_id,
-            'creator_type' => $ticket->creator_type,
-            'creator_id' => $ticket->creator_id,
-            'assignee_type' => $dto->assignee_id ? Admin::class : null,
-            'assignee_id' => $dto->assignee_id,
-        ];
-
-
+        $attachments = $data['attachments'] ?? null;
         $ticket->update($data);
 
         // TODO:: 2 endpoint (add media , delete media)
-        if (!empty($dto->attachments)) {
+        if (!empty($attachments)) {
             $ticket->clearMediaCollection('attachments');
 
-            foreach ($dto->attachments as $file) {
+            foreach ($attachments as $file) {
                 $ticket->addMedia($file)->toMediaCollection('attachments');
             }
         }

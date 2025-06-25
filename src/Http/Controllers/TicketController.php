@@ -67,7 +67,7 @@ class TicketController extends Controller
 
     public function show(int $id)
     {
-        $ticket = $this->ticketService->find($id, ['creator', 'assignee', 'status', 'priority', 'category', 'media']);
+        $ticket = $this->ticketService->find($id, ['creator', 'assignee', 'category', 'media']);
         return $this->successResponse(TicketResource::make($ticket));
     }
 
@@ -76,8 +76,7 @@ class TicketController extends Controller
         $data = $request->validated();
         $data['attachments'] = $request->file('attachments', []);
 
-        $dto = TicketDTO::fromRequest($data);
-        $this->ticketService->update($dto, $id);
+        $this->ticketService->update($data, $id);
 
         // event(new TicketAssigned($ticket, $assignedAdmin));
         return $this->updatedResponse();
