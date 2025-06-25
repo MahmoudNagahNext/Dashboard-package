@@ -59,23 +59,6 @@ class TicketService
         return $this->model::query()->with($with)->find($id);
     }
 
-    // public function update(array $data, $id)
-    // {
-    //     $ticket = $this->model->find($id);
-    //     $attachments = $data['attachments'] ?? null;
-    //     $ticket->update($data);
-
-    //     // TODO:: 2 endpoint (add media , delete media)
-    //     if (!empty($attachments)) {
-    //         $ticket->clearMediaCollection('attachments');
-
-    //         foreach ($attachments as $file) {
-    //             $ticket->addMedia($file)->toMediaCollection('attachments');
-    //         }
-    //     }
-    //     return $ticket;
-    // }
-
     public function updateTicket(array $data, $id)
     {
         $ticket = $this->model->findOrFail($id);

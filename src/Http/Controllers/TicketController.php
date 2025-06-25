@@ -90,7 +90,6 @@ class TicketController extends Controller
         $ticket = $this->ticketService->updateTicket($request->validated(), $id);
         return response()->json([
             'message' => 'Ticket updated successfully',
-            'data' => new TicketResource($ticket)
         ]);
     }
 
@@ -99,7 +98,6 @@ class TicketController extends Controller
         $media = $this->ticketService->addAttachments($id, $request->file('attachments'));
         return response()->json([
             'message' => 'Attachments added successfully',
-            'data' => $media
         ]);
     }
 
@@ -108,7 +106,6 @@ class TicketController extends Controller
         $media = $this->ticketService->deleteAttachments($id, $request->input('media_ids'));
         return response()->json([
             'message' => 'Attachments deleted successfully',
-            'data' => $media
         ]);
     }
 

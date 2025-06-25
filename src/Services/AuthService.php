@@ -10,10 +10,9 @@ use nextdev\nextdashboard\Models\Admin;
 
 class AuthService
 {
+     // TODO:: Use Auth Facade to implement login functionality
      public function login(array $credentials)
      {
-          // TODO:: Use Auth Facade to implement login functionality
-
           $admin = Admin::where('email', $credentials['email'])->first();
           
           // Verify password directly instead of using attempt

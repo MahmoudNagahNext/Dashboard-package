@@ -4,6 +4,7 @@ namespace nextdev\nextdashboard\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Response;
 use nextdev\nextdashboard\Traits\ApiResponseTrait;
 use nextdev\nextdashboard\Http\Requests\Admin\AdminStoreRequest;
 use nextdev\nextdashboard\Http\Requests\Admin\AdminUpdateRequest;
@@ -38,11 +39,22 @@ class AdminController extends Controller
         
         $admins = $this->adminService->paginate($search, $with, $perPage, $page, $sortBy, $sortDirection);
         
-        return $this->paginatedCollectionResponse(
-            $admins,
-            'Admins Paginated',
-            [], 
-            AdminResource::class);    
+        return Response::json([
+            'success' => true,
+            'message' => 'Admins Paginated',
+            'data' => AdminResource::collection($admins),
+            'meta' => [
+                'current_page' => $admins->currentPage(),
+                'last_page' => $admins->lastPage(),
+                'per_page' => $admins->perPage(),
+                'total' => $admins->total(),
+            ],
+        ]);
+        // return $this->paginatedCollectionResponse(
+        //     $admins,
+        //     'Admins Paginated',
+        //     [], 
+        //     AdminResource::class);    
     }
 
     public function store(AdminStoreRequest $request)
@@ -50,33 +62,53 @@ class AdminController extends Controller
         $admin = $this->adminService->create($request->validated());
         // event(new AdminCreated($admin));
 
-        return $this->createdResponse(
-            AdminResource::make($admin),
-            'Admin created successfully'
-        );
+        return Response::json([
+            'success' => true,
+            'message' => 'Admin created successfully',
+            'data' => AdminResource::make($admin),
+        ],201);
+        // return $this->createdResponse(
+        //     AdminResource::make($admin),
+        //     'Admin created successfully'
+        // );
     }
 
     public function show(int $id)
     {
-        return $this->successResponse(
-            AdminResource::make($this->adminService->find($id)),
-            'Admin found successfully'
-        );
+        return Response::json([
+            'success' => true,
+            'message' => 'Admin found successfully',
+            'data' => AdminResource::make($this->adminService->find($id)),
+        ]);
+        // return $this->successResponse(
+        //     AdminResource::make($this->adminService->find($id)),
+        //     'Admin found successfully'
+        // );
     }
 
     public function update(AdminUpdateRequest $request,int $id)
     {
         $this->adminService->update($request->validated(), $id);
-        return $this->updatedResponse(
-            [],
-            'Admin updated successfully'
-        );
+        return Response::json([
+            'success' => true,
+            'message' => 'Admin updated successfully',
+            'data' => [],
+        ]);
+        // return $this->updatedResponse(
+        //     [],
+        //     'Admin updated successfully'
+        // );
     }
 
     public function destroy(int $id)
     {
         $this->adminService->delete($id);
-        return $this->deletedResponse('Admin deleted successfully');
+        return Response::json([
+            'success' => true,
+            'message' => 'Admin deleted successfully',
+            'data' => [],
+        ]);
+        // return $this->deletedResponse('Admin deleted successfully');
     }
 
     public function assignRole(AssignRoleRequest $request, int $id)
@@ -84,15 +116,25 @@ class AdminController extends Controller
         $admin = $this->adminService->AssignRole($request->validated()['role_id'], $id);
         // event(new RoleAssignedToAdmin($admin, $role));
 
-        return $this->successResponse(
-            AdminResource::make($admin),
-            'Admin role assigned successfully'
-        );
+        return Response::json([
+            'success' => true,
+            'message' => 'Admin role assigned successfully',
+            'data' => [],
+        ]);
+        // return $this->successResponse(
+        //     AdminResource::make($admin),
+        //     'Admin role assigned successfully'
+        // );
     }
 
     public function bulkDelete(BulkDeleteRequest $request)
     {
         $this->adminService->bulkDelete($request->validated()['ids']);
-        return $this->deletedResponse('Admins deleted successfully');
+        return Response::json([
+            'success' => true,
+            'message' => 'Admins deleted successfully',
+            'data' => [],
+        ]);
+        // return $this->deletedResponse('Admins deleted successfully');
     }
 }
