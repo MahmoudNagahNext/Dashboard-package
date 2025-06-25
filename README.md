@@ -1,53 +1,63 @@
-# NextDashboard Package
+# 🚀 NextDashboard Package
 
-A customizable admin dashboard package built for Laravel projects. 
-This package provides ready-to-use migrations, seeders, and authentication setup for admin users.
-And Ticking system
+**NextDashboard** is a customizable admin dashboard package built specifically for Laravel projects.  
+It provides out-of-the-box features including:  
+- Admin authentication system  
+- Role & permission management using [Spatie Laravel-Permission](https://spatie.be/docs/laravel-permission)  
+- A full-featured ticketing system  
+- Media management and activity logging via Spatie libraries  
+
 ---
 
-## Installation
+## 📦 Installation & Setup
 
-### 1. Require the package via Composer
+### 1️⃣ Install the Package
+```bash
 composer require nagahnextdev/nextdashboard:dev-main
+```
 
+---
 
-### 2. Publish package resources
-php artisan vendor:publish --tag=nextdashboard-migrations
-php artisan vendor:publish --tag=nextdashboard-seeders
+## 🔐 Authentication Setup
 
-### 3. Run the seeders
-php artisan db:seed --class=AdminSeeder (Make sure the permissions are installed.)
-php artisan db:seed --class=TicketPrioritySeeder
-php artisan db:seed --class=TicketStatusSeeder
+Update your `config/auth.php` file:
 
-### 4. Authentication Setup
-Update your config/auth.php file to support the admin guard used by the package.
-
-Add the admin guard
+#### ➕ Add the `admin` guard:
+```php
 'admin' => [
     'driver' => 'token',
     'provider' => 'admins',
 ],
+```
 
-Add the admins provider
+#### ➕ Add the `admins` provider:
+```php
 'admins' => [
     'driver' => 'eloquent',
     'model' => \nextdev\nextdashboard\Models\Admin::class,
 ],
+```
+---
 
-Add password reset configuration for admins
-'admins' => [
-    'provider' => 'admins',
-    'table' => 'password_reset_tokens',
-    'expire' => 60,
-],
+## 🛡️ Spatie Permission Setup
 
-### 5. Spatie Media
+```bash
+php artisan vendor:publish --tag="permission-migrations"
+php artisan vendor:publish --tag="permission-config"
+php artisan migrate
+```
+
+---
+
+## 📁 Media Library Setup
+
+```bash
 php artisan vendor:publish --provider="Spatie\MediaLibrary\MediaLibraryServiceProvider" --tag="medialibrary-migrations"
 php artisan vendor:publish --provider="Spatie\MediaLibrary\MediaLibraryServiceProvider" --tag="medialibrary-config"
+```
 
-
-in config/filesystems.php
+Update your `config/filesystems.php`:
+```php
 'disks' => [
     'public' => [
         'driver' => 'local',
@@ -56,35 +66,65 @@ in config/filesystems.php
         'visibility' => 'public',
     ],
 ]
+```
 
-run 
+Then link the storage:
+```bash
 php artisan storage:link
+```
 
-### 6. spatie permission
-php artisan vendor:publish --tag="permission-migrations"
-php artisan vendor:publish --tag="permission-config"
-php artisan migrate
+---
 
-### 7. Spatia Laravel-activitylog
+## 📝 Activity Log Setup
+
+```bash
 php artisan vendor:publish --provider="Spatie\Activitylog\ActivitylogServiceProvider" --tag="activitylog-migrations"
 php artisan vendor:publish --provider="Spatie\Activitylog\ActivitylogServiceProvider" --tag="activitylog-config"
 php artisan migrate
+```
+
+---
+
+## ⚙️ Publish NextDashboard Resources
+
+```bash
+php artisan vendor:publish --tag=nextdashboard-migrations
+php artisan vendor:publish --tag=nextdashboard-seeders
+```
+
+---
+
+## 🌱 Seed Initial Admin User
+
+```bash
+php artisan db:seed --class=PermissionSeeder
+php artisan db:seed --class=AdminSeeder
+```
+> **Note:** Ensure that Spatie permissions are properly installed before running this seeder.
+
+---
 
 ## 📢 Available Events
 
-you can list all events using this command
--- php artisan nextdashboard:list-events
+You can list all available events using:
+```bash
+php artisan nextdashboard:list-events
+```
 
-The following events are dispatched by the `nextdashboard` package:
+| Event Name             | Description                                       |
+|------------------------|---------------------------------------------------|
+| `AdminCreated`         | Triggered when a new admin is created             |
+| `RoleAssignedToAdmin`  | Triggered when a role is assigned to an admin     |
+| `TicketCreated`        | Triggered when a new ticket is created            |
+| `TicketAssigned`       | Triggered when a ticket is assigned to an admin   |
+| `TicketReplied`        | Triggered when a reply is added to a ticket       |
 
-| Event Name               | Description                                          |
-|--------------------------|------------------------------------------------------|
-| `AdminCreated`           | Dispatched when a new admin is created.              |
-| `RoleAssignedToAdmin`    | Dispatched when a role is assigned to an admin.      |
-| `TicketCreated`          | Dispatched when a new ticket is created.             |
-| `TicketAssigned`         | Dispatched when a ticket is assigned to an admin.    |
-| `TicketReplied`          | Dispatched when a reply is added to a ticket.        |
+---
 
+## 🧹 Scheduled Commands
 
-### 🔧 Command
-php artisan otps:delete-expired [need to be Scheduled Tasks]
+### Clean up expired OTPs:
+```bash
+php artisan otps:delete-expired
+```
+> Add this command to the scheduler in your `App\Console\Kernel.php`.

@@ -9,7 +9,6 @@ use Spatie\Permission\Models\Role;
 
 class AdminService
 {
-    // TODO:: function return type
     public function __construct(
         private Admin $model,
     ){}
