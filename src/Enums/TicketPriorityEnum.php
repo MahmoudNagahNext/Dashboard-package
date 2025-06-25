@@ -12,6 +12,6 @@ enum TicketPriorityEnum: string
 
     public function label(): string
     {
-        return __('dashboard.priority.' . $this->value);
+        return __('nextdashboard::dashboard.priority.' . $this->value);
     }
 }

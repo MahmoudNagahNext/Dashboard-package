@@ -14,6 +14,6 @@ enum TicketStatusEnum: string
 
     public function label(): string
     {
-        return __('dashboard.status.' . $this->value);
+        return __('nextdashboard::dashboard.status.' . $this->value);
     }
 }
