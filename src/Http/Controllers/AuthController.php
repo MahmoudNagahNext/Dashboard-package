@@ -2,6 +2,7 @@
 
 namespace nextdev\nextdashboard\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Response;
 use nextdev\nextdashboard\Http\Requests\Auth\LoginRequest;
@@ -14,7 +15,8 @@ class AuthController extends Controller
         protected AuthService $authService
     ){}
 
-    public function login(LoginRequest $request)
+    public function login(LoginRequest $request):JsonResponse
+
     {
         $admin = $this->authService->login($request->validated());
 

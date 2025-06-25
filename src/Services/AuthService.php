@@ -2,16 +2,14 @@
 
 namespace nextdev\nextdashboard\Services;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use nextdev\nextdashboard\DTOs\AdminDTO;
 use nextdev\nextdashboard\Models\Admin;
 
 class AuthService
 {
      // TODO:: Use Auth Facade to implement login functionality
-     public function login(array $credentials)
+     public function login(array $credentials): Admin
      {
           $admin = Admin::where('email', $credentials['email'])->first();
           
