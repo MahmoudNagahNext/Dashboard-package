@@ -51,7 +51,7 @@ Route::prefix("dashboard")
             Route::get('statuses', [SettingsController::class, 'ticketStatuses']);
             Route::get('priorities', [SettingsController::class, 'ticketPriorities']);
         
-             // Tickets resource
+            // Tickets resource
             Route::apiResource('', TicketController::class)->parameters(['' => 'ticket']);
             Route::post('{id}/attachments', [TicketController::class, 'addAttachments']);
             Route::delete('{id}/attachments', [TicketController::class, 'deleteAttachments']);

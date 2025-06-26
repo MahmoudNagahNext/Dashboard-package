@@ -2,7 +2,6 @@
 
 namespace nextdev\nextdashboard\Services;
 
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 
@@ -13,7 +12,7 @@ class RoleService
         private Role $model,
     ) {}
     
-    public function paginate($search = null, $with = [], $perPage = 10, $page = 1, $sortBy = 'id', $sortDirection = 'desc'): LengthAwarePaginator
+    public function paginate($search = null, $with = [], $perPage = 10, $page = 1, $sortBy = 'id', $sortDirection = 'desc')
     {
         $q = $this->model::query()->with($with);
 
@@ -44,7 +43,7 @@ class RoleService
         return  $this->model::query()->with($with)->findOrFail($id);
     }
 
-    public function update(int $id, array $data): bool|null
+    public function update(int $id, array $data): Role
     {
         $role = $this->model::query()->findOrFail($id);
 

@@ -23,4 +23,3 @@ class TicketReply extends Model implements HasMedia
         return $this->belongsTo(Admin::class, 'admin_id');
     }
 }
-use Spatie\Translatable\HasTranslations;

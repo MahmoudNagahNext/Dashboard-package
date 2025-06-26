@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->boolean('status')->default(1);
+            $table->boolean('status')->default(1); // TODO:: need to apply in login 
             $table->string('api_token', 80)->nullable()->unique();
             $table->rememberToken();
             $table->timestamps();
