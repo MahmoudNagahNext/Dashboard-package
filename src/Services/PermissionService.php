@@ -15,7 +15,7 @@ class PermissionService
 
     
 
-    public function groupedPermissions(): Collection
+    public function groupedPermissions()
     {
         $permissions = $this->model::all();
 

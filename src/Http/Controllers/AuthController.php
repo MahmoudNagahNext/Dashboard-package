@@ -16,7 +16,6 @@ class AuthController extends Controller
     ){}
 
     public function login(LoginRequest $request):JsonResponse
-
     {
         $admin = $this->authService->login($request->validated());
 
