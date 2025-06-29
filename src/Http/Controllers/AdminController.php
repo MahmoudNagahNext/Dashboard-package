@@ -25,6 +25,7 @@ class AdminController extends Controller
         $this->middleware('can:admin.assign_role')->only('assignRole');
     }
 
+    //test comment 
     public function index(Request $request): JsonResponse
     {
         $search = $request->get('search');
